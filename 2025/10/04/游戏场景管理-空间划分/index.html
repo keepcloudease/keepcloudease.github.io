@@ -1,0 +1,485 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>游戏场景管理--空间划分 | 恒逸的博客</title><meta name="keywords" content="中级"><meta name="author" content="恒逸"><meta name="copyright" content="恒逸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="游戏场景管理--空间划分"><meta name="application-name" content="游戏场景管理--空间划分"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="游戏场景管理--空间划分"><meta property="og:url" content="http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/index.html"><meta property="og:site_name" content="恒逸的博客"><meta property="og:description" content="一 前言空间划分算法有很多，比如均匀网格，四&amp;#x2F;八叉树，k-d树，Bsp树，每一种算法都有自己的优缺点，我们需要从理论上理解这些算法，然后在实际项目中进行灵活的运用。 游戏中经常使用空间划分算法来优化碰撞，视锥体剔除，邻近查询，因此每当我们讨论一个算法的时候都会从这三方面进行探讨。另外我们还"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg"><meta property="article:author" content="恒逸"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg"><meta name="description" content="一 前言空间划分算法有很多，比如均匀网格，四&amp;#x2F;八叉树，k-d树，Bsp树，每一种算法都有自己的优缺点，我们需要从理论上理解这些算法，然后在实际项目中进行灵活的运用。 游戏中经常使用空间划分算法来优化碰撞，视锥体剔除，邻近查询，因此每当我们讨论一个算法的时候都会从这三方面进行探讨。另外我们还"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/"><link rel="preconnect" href="//cdn.cbd.int"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: {"enable":true,"img":"https://upload-bbs.miyoushe.com/upload/2024/07/27/125766904/ba62475f396df9de3316a08ed9e65d86_5680958632268053399..png"},
+  postHeadAiDescription: {"enable":true,"gptName":"AnZhiYu","mode":"local","switchBtn":false,"btnLink":"https://afdian.net/item/886a79d4db6711eda42a52540025c377","randomNum":3,"basicWordCount":1000,"key":"xxxx","Referer":"https://xx.xx/"},
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: undefined,
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "nav_music",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: 恒逸","link":"链接: ","source":"来源: 恒逸的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: '恒逸的博客',
+  title: '游戏场景管理--空间划分',
+  postAI: '',
+  pageFillDescription: '一 前言, 假定我们在每帧中只测试部分对象, 假定每帧我们测试全部对象, 其他优化事项, 层次网格, 均匀网格, 层次网格, 二 四x2F八叉树, 三 k-d树, 四 bsp树, 五 混合使用一前言空间划分算法有很多比如均匀网格四八叉树树树每一种算法都有自己的优缺点我们需要从理论上理解这些算法然后在实际项目中进行灵活的运用游戏中经常使用空间划分算法来优化碰撞视锥体剔除邻近查询因此每当我们讨论一个算法的时候都会从这三方面进行探讨另外我们还将考虑静态对象和动态对象对算法的影响主要体现在空间节点的快速更新能力以及对象快速变更节点的能力二均匀网格我们可以把游戏场景均匀的划分成一个个小的网格如下图我们先简化讨论的情况假定场景对象的坐标是中心位置坐标场景对象的包围盒小于单位网格的尺寸场景对象每帧只做部分对象的碰撞检测那么碰撞检查只需要在对象中心坐标所属的网格及邻近网格之间进行相交测试也就是在九宫格中进行碰撞检查为什么会得出这个结论呢大家可以在纸上画一下因为对象的包围盒小于单位网格即便它在网格的边界处也无法超出邻近网格的范围假定场景被划分成个网格我们可以根据对象的坐标快速的定位所属及相邻的个网格碰撞检测只需要拿出这个网格中的对象然后进行相交测试这样就快速的排除了个网格大部分空间因此这个算法非常适合碰撞检测及邻近查询但它对视锥体剔除并不友好我们需要遍历大量的网格检测它是否在视锥体中这个算法并不高效对于移动的对象我们不需要重新划分网格而且也可以快速的进行网格变更因此该算法对移动的对象特别友好综上所述均匀网格算法特别适合做碰撞检测及邻近查询不适合做视锥体剔除对静态对象及动态对象特别友好所有的一切都基于我们之前的假定但是如果场景中存在比较大的对象我们就必须扩大单位网格的尺寸我们希望可以不受对象的限制合理的分配单位网格的尺寸如何做到呢对大型模型进行切割用更多小的包围体拆解模型使用层次网格我们暂时先不讨论复杂的大型对象让我们看看均匀网格的实现需要注意哪些问题我们需要选择一套数据结构来存储网格及对象这里要思考静态场景和动态场景的区别让我们先从简单的静态场景说起如上图我们可以用数组下标来代表网格数组里面存储一个指针这个指针指向链表的表头链表中的每一个元素就是网格中的场景对象这套数据结构不仅可以支持静态场景还可以支持动态场景因为随时可以对链表进行增加或删除但是方案并不是一个高效的数据结构因为它用链表来存储对象会造成内存的浪费也会降低的命中方案用数组取代了链表来存储场景中的对象数组是一块连续的内存地址可以提高的命中而且相对于链表可以节省内存空间每一个网格需要记录存储对象的其实位置以及所属对象的个数这需要遍历两次场景第一次确定每个网格的对象数量及对象的总数第二次遍历分配场景对象方案适合静态场景并且可以离线预处理在实际应用中我们往往使用均匀网格处理动态场景比如中管理角色怪物之前介绍的方案是可以支持动态场景的但它的效率不高因为存储对象的数据结构是单向链表我们插入一个对象的时间复杂度是查询和删除的时间复杂是我们希望查询和删除的时间复杂度也是我们可以在对象内部保存链表元素的指针这样就可以快速的定位元素进行查找和删除操作了假设我们的场景很大比如吃鸡游戏但是场景中的角色数量不多也就是说场景中大部分网格都是空的如果为每一个网格分配内存即便是使用数组也是极大的内存浪费我们希望分配的内存与对象的数量有关和单位网格的尺寸无关听起来像延迟光照这就需要请出哈希大神了我们可以通过一个哈希函数将网格映射到一个的数组中如下图使用哈希表可以大大节省内存空间但是要解决哈希冲突如上图有两个网格被分配到了中解决哈希冲突又三种方法开放寻址法再散列法链地址法开放寻址法简单理解就是如果发生冲突那么就重新寻找一个合适的空位如何寻找合适的空位可以用线性探测二次探测伪随机探测等多种方法开放寻址法是一种封闭式的散列表因为它没有开辟新的内存空间封闭式散列法如果所有的空间都被占用了该怎么办要么报错要么开辟一个更大的空间然后进行大量这里就不详细的展开了再散列法其实和开放寻址法差别不大只是遇到冲突后需要使用另一个散列函数重新分配直到冲突不再发生这种方法不容易产生聚集但是会耗费更多的计算时间该方法也是封闭式散列表链地址法和我们上面提到的网格下面挂一个链表很相似如果发生冲突就在冲突的位置挂一个链表然后把链表的头指向新插入的元素这是一种开放式的散列表因为每当发生冲突的时候都会开辟新的内存空间用来存储元素之前我们把场景对象都看成是一个点所以每个对象只存储在一个网格中如果对象是一个包围盒那么与包围盒相交的每一个网格都需要存储场景对象如果包围盒占据的网格那么它就需要在个网格中记录对象这不仅浪费内存空间还会降低对象插入的速度为了改善这种情况我们可以按照下图的方式组织对象每一个行和列都存储一个链表这样如果包围盒占据的网格那么它只需要存储在个网格中对象的相交测试通过下列方式实现考查该对象是否与其交叠的行网格单元和列网格单元的其他对象相交这个方案可以改善最化的插入操作但是当对象只是与少数网格交叠的时候相交测试的开销反而会变大一种较为新颖的存储算法是采用如下方案针对网格的每一行和每一列及场景对象的数量分配一个位数组上图中有个对象所以每一行和每一列都有一个位二进制数用来标记它们是否和网格相交我们看第一行它与和相交那么第位和第位置再看第一列它与相交那么第位置我们要想看看第一行第一列的网格中有哪些对象只需要将行和列的二进制数进行操作第位是其他位是说明号对象在这个网格中第五位代表号对象第一位代表号对象我们要想获得对象碰撞的潜在集合只需要看看该对象占用的每一个网格上还有哪些对象公式如下上面的公式可以简化为我们看看号对象和哪些对象有可能相交号对象占据了行及列结果显示第位和第位为也就是号对象和号对象有可能相交我能来总结一下每一套数据结构占用内存的大小如下图第一套是使用位数组可以看到这套方案大部分情况下占用的内存都是最少的只有在对象到达的时候内存才飙升上来第二套是紧凑数组双向链表可以看到这套数据结构大部分情况下占用的内存都是最高的第三套是哈希表双向链表可以看到这套数据结构的内存占用与对象的数量息息相关对象数量越多占用的内存越高假定我们在每帧中只测试部分对象如果我们使用点代表对象我们需要与所有的邻接网格进行测试也就是宫格如果我们使用包围盒的最小顶点代表对象我们可以采用如下算法优化测试最好的情况是次测试最坏的情况是次测试如果我们用包围盒代表对象也就是说与相交的网格都包含对象我们可以使用更快速的测试算法最好的情况次测试最坏的情况次测试虽然加速了碰撞测试的速度却增大了内存而且还降低了对象移动更新的效率因为点的更新速度要比包围盒快很多所以每一种算法我们都需要根据实际情况进行权衡假定每帧我们测试全部对象我们可以想象一下与相交和与相交是一样的测试结果假如在的左侧那么只需要检测右边的邻接网格就可以了因为左边的邻接网格由的碰撞检测来完成因此假定我们以点来表示对象那么碰撞检测可以优化为次碰撞如果采用最小顶来测试那么测试算法和采用测试时一样的其他优化事项如果网格存储的对象大部分都是移动的那么重新分配所有对象要比更新所有对象效率更好既然不更新对象我们就可以使用单链表这种更简洁的数据结构表示对象如果存储的对象的直径小于网格的二分之一我们可以采用边形网格如下图可以看到如果采用中心代表对象方案只需要测试个网格如果采用最小顶点测试方案方案需要测试个网格另外这种边形网格可以提高射线碰撞的测试效率层次网格如果场景中存在比较大的对象就需要使用层次网格来存储不同大小的对象在每个层上对象的直径将小于单位网格直径层次网格和四八叉树很像只是没有树顶节点因为层次网格的深度小于树的深度所有由更好遍历效率如果每一帧所有对象都进行测试测试过程无须处理层次网格的各个层每个对象从插入层开始测试并遵循下列原则较小的对象与较大对象所处的层进行测试但是如果每一帧只有部分对象进行测试那么对象就需要和所有层的对象进行测试这是非常浪费效率的做法总结一下均匀网格和层次网格均匀网格均匀网格不适合做视锥体剔除第一均匀网格没有层的概念不能快速剔除大片物体第二均匀网格很难处理大小不一的世界游戏场景往往就是由大小不一的物体组成的总之没有人用均匀网格进行视锥体剔除如果是碰撞检测均匀网格限制太多首先要求物体的直径小于单位网格的直径这个要求是为了高效碰撞检测这往往不能满足游戏的场景碰撞我们不可能让一个子弹打到墙上不消失吧但是如果可以满足均匀网格的限制碰撞检测的效率是最高的而且对动态碰撞特别友好如果是塔防游戏子弹不会和场景碰撞只和移动的敌人碰撞那么就非常适合用均匀网格进行碰撞检测均匀网格非常适合做邻近查询因为邻近查询没有体积的概念只代表一个点服务器的广播策略往往就是用均匀网格做的因此以后就不讨论邻近查询了因为其他的算法都不如均匀网格层次网格层次网格可以通过上层网格进行大面积的视锥体剔除也可以处理大小不一的世界但是视锥体剔除与碰撞检测有一个很重要的区别视锥体剔除要求单位网格完全包住物体否则物体将会被错误的剔除掉明明能够看见但是被剔除了如果一个物体在多个网格的交界处那么这个物体就需要被所有网格包含只有所有网格被剔除那么这个物体才会被剔除这样无疑增加了剔除的复杂度如果把物体提升到上层处理那么就有违层次包围盒最原始的设计理念上层的物体是因为尺寸才被提升的而不是因为物体在网格的交界处所以视锥体剔除更适合使用四八叉树进行其实层次网格和四八叉树在结构上很相似但是在构建的过程却差别很大完全是不同的思想在碰撞检测上层次包围盒基本上可以满足场景碰撞但是层次网格不太擅长处理世界场景中包含大量分布不均匀的小型静态物体如果底层的网格使用密集型网格存储数组内存开销会很昂贵如果使用哈希结构存储会导致额外的计算及降低命中可以考虑其他类型的层次网格计算这里我没有继续研究因为我目前主要的工作是渲染向具体可以参考递归网格算法均匀层次网格适应性网格题外话现在都强调不要造轮子有那么多牛逼的物理库还研究这些东西干什么我个人觉得不要造轮子这句话的意思是尽量使用成熟的第三方库但从来没有让你放弃学习内部的原理有些东西知道理论是一回事实践过是另外一回事真想做好技术还真要自己造轮子二四八叉树四叉树理解起来很简单把蛋糕均匀的切成四份然后再递归的把每一份切成四份这样就形成了一棵含有四个子节点的四叉树八叉树同理就是切成八份可以想象四八叉树把空间划分成了很多房间每个房间中的对象都挂在相应的节点上递归结束的条件有两种一种是规定树的最大深度另一种是一直切到每个房间中的对象个数小于某一个阈值无论是层次网格还是四八叉树都会遇到一个问题如下图图中灰色的圆球分布在多个网格的交界处这些圆球到底应该分配到哪个房间中呢有两种处理方法一种是每个网格都包含圆球另一种是把圆球存储到上层节点中其实还有一个办法就是把求分割了存储到多个网格的弊端我们之前已经讨论了把圆球存储到上层节点有什么问题么如果一个很小的圆球恰好在世界的中心那么它就会被分配到最上层的根节点视锥体是无法通过四八叉树剔除这个圆球的因为它在最上层的根节点中同理上面那些灰色的圆球很有可能因为存放在上层空间而无法被剔除即便它们是很小的物体这是一个无法彻底解决的问题但是我们至少让那些小的物体下降到更低的层上从而让他们能够被正确的剔除这就需要使用松散四八叉树松散四叉树就是适当的扩大每一个网格的尺寸如上图这样就可以把那些处在边界的小物体囊括到网格中使用松散四叉树可以让大部分小物体下降到更低的层次但是有一些真的很大并且在边界的物体依然会被分配到了上层空间中使用松散四叉树虽然让很多物体下降到了更低的层次但是空间网格被放大了如果相机在网格的边缘原先会被整体剔除的网格现在无法被剔除了没有完美的结局只有最适合的结局四八叉树很适合做视锥体剔除相机可以从根节点遍历树如果节点被剔除那么房间中的所有对象都会被剔除假定每个对象都被空间节点完全包裹那么一个房间中的对象就只会和这个房间中的对象发生碰撞另外处于同一空间中的父子节点也可能发生碰撞简单的说碰撞检测就是当前节点及父子节点中的对象进行相交测是这个有点类似层次网格只是不需要再检测邻接节点了让我们来看看八叉树的存储结构如下图节点的中心位置节点的半径指向子节点的指针指向对象的表头指针这是最简单的八叉树存储结构如果八叉树是满树也就是每个节点都包含个子节点那么我们也可以使用数组表示八叉树这种数据结构更紧密若树节点存储于数组中则针对某一父节点其八叉树的子节点可以表示为一个层的完全八叉树最多包含个节点空间消耗太昂贵了所以要控制满树的层数最多不要超过层对于动态的八叉树随着物体的移动八叉树的结构会发生变化是不是可以直接使用满树来避免树结构的变化虽然浪费了内存却换取了计算的时间现在高效的做法都是使用哈希存储的线性树存储结构如下图相对于指针八叉树每个节点节省了很多内存空间这些节点会根据值存储到哈希表中这样访问节点的速度就从原先的变成了即节省了内存空间又提升了访问速度两全其美的优化吃起来很香这里神秘的是什么它叫莫顿序或莫顿码将多维数据映射到一维同时保持数据点的局部性这句话听起来好高大上让我们用通俗的语言来解释它假设我们使用的是四叉树四叉树中的每一个网格都对应了一个位置坐标相当于二维数组的下标我们把每个节点存储在一个二维数组中那么根据这组坐标就可以确定节点的位置了我们希望把这个二维数据映射到一维数据中这就好比将二维数组转换为一维数组这里的就是前半段话的意思同时又保持数据节点的局部性这句话怎么解释呢我们来看一张图我们可以看到第一张图是一个后面的图都是由组成的二维空间三维空间这里的局部型就是这个这个曲线也就是曲线这是感性的认识让我们理性的看清它的真面目如下图这里有个节点相当于四叉树的所有叶子节点看看的排列顺序是不是一个型如果看成是一个点那么它所属的上层空间组成的是不是也是一个型为什么是型不是型呢看下面一张图我们只需要将的二进制码交替组合就可以得出值是奇数位是偶数位对于一棵八叉树我们可以用位代表子节点的位置是位可以代表一个层的八叉树为了能够区分和我们需要在前面加上一个这样我们就可以根据值来计算出这个节点是在第几层代码如下已知父节点的位置码我们可以方便的计算出子节点的位置码已知子节点的位置码我们可以方便的得出父节点的位置码我们将位置码做为哈希表的这样我们就可以快速的访问八叉树的每一个节点了坐标转换世界坐标网格坐标整型三树树是将维空间中的点进行分割的数据结构代表子划分空间的数量是维度的意思树是树的一种另一种解释是树是二分查找树在维空间的泛化树在一维空间是一棵二分查找树树每次只会选取一个基轴方向进行分割比如二维空间中先沿方向分割然后再沿轴方向分割以此循环数的建树过程分两步选哪一个轴进行分割沿分割轴方向上的哪个点进行分割将中值左侧的数据挂在左子树右侧的数据挂在右子树我们希望构建的树尽量是平衡树而不是一个退化的链表如下图因此常用的分割策略是对比数据点在各维度的分布情况数据点在某一维度坐标值的方差越大分布越分散方差越小分布越集中从方差大的维度开始切分可以取得很好的切分效果及平衡性选分割轴上的中值中间的点进行分割树可以做精确查找也可以做范围查询当然还可以做视锥体剔除碰撞检测确定渲染顺序因为它也是一棵树树最强大的地方是它能对多个维度进行范围查询比如想要查找年龄在岁以上并且身高在到之间的所有人用树就能很好的解决由于树的结构要求上面的例子中要求每个人的年龄和身高各项数据必须齐全如果某个人只有年龄或只有身高就无法使用树索引了所以实际上树更常见的应用是经纬度定位或者三维空间定位某个维度数据缺失其他维度数据也就没有意义了高纬度数据查找效率并不一定好有时候可能不如最原始的暴力查找通常如果维度为则树中的点数应远远大于的次方否则查找时节点中大多数节点都会被遍历到效率上还不如原始的遍历说到邻近查询我们就会和均匀网格进行比较从查找的效率来看我个人觉得均匀网格会更快首先确定附近空间均匀网格的查找复杂度是而的复杂度是其次动态生成树是非常耗时的所以树不适合动态场景树的应用场景更多的应该是在多维度以及可以是任意数据比如年龄身高体重财富等等在游戏中树并不是为了邻近查询当然它也可以做邻近查询比如遮挡剔除需要按照由前到后的顺序渲染这时候就可以使用树因为树是树它可以提供任意视点的渲染顺序四树树是所有空间划分中最复杂的一种树形结构它采用任意位置方向的分割面递归地将空间划分成多个子空间对对于维空间其分割面则为维的超平面之前说的树就是树的一种它的划分面是平行于每个轴的面树复杂就复杂在它太灵活一个任意位置方向的分割面就会让我们不知所措其实也不是任意的了每个划分都是为了达到某个目标这里的任意其实可以理解为手动取选择分割面你可以使用树来切割空间如图也可以使用树来区分一个复杂多边形的内外区域如图最初的设计需求是为了对渲染多边形进行排序参考画家算法因为当时是一个非常昂贵的操作的视锥体剔除技术和四八叉树完全不一样因此它们一个适合室外一个适合室内四八叉树的算法决定了它适合广阔的室外场景而技术则适合有很多房间的室内场景因为房间中有很多墙这些墙可以遮挡大片的物体如上图平面位于视点的背面那么所有的子节点包含的物体都不会被相机看到这些物体就可以快速的剔除掉这就是的背面剔除技术这里的背面剔除技术不是通过绕序进行裁剪的背面剔除通过绕序进行裁剪的背面剔除只需要考虑眼睛的位置而背面剔除技术需要考虑视点的位置以及视线的朝向还有视锥体的上图是计算背面剔除的方法我就不详细介绍了希望了解算法详情的参见游戏大师编程技巧一书做室内游戏往往需要配一个关卡编辑器这个编辑器应该有一个功能就是把室内场景中的房间的墙设定成的分割面然后将场景中的静态物体通过这些分割面生成一棵树这样就可以进行视锥体剔除了当然手动设置分割面是一个很低效的做法自动分割的算法很复杂需要不停的试探找到一个最优解因此树通常是在离线预处理上图是一个凹面体我们可以使用树来把这个凹面体的内外区域标记出来一个点从树根处开始遍历一直找到叶子节点这样就可以确定这个点是不是在凹面体中了树的理论其实并不复杂复杂在实现上这里就不更多的介绍了五混合使用很多时候我们可以混合使用空间划分算法比如我们可以先将场景按照均匀网格划分然后每一个网格再按照树型结构划分这样就形成了一个森林再比如我们可以通过均匀网格快速的定位一棵树的节点这样可以加速树的访问如下图我们假设如果要做这样的游戏该如何进行场景管理呢我们先约定一下需求中静态场景非常庞大场景里面有许多的高楼大厦里面有许多动态的物体比如汽车而且数量庞大再也没有比更复杂的场景了我也只是浅浅的做一下个人分析算是对学习的小结复杂的城市场景一定要使用遮挡剔除技术使用遮挡剔除就需要对渲染体进行从前往后的排序需要一种快速的剔除技术剔除大量看不见的静态物体离线准备工作为场景中的静态物体分配包围盒一些小的离的近的物体可以分配到一个包围盒中为场景中所有不透明物体生成一棵树使用八叉树划分静态场景实现使用八叉树进行视锥体剔除将被剔除的物体进行标记使用树按照从前往后的顺序遍历场景首先判断节点是否在视线的背面如果在背面就剔除这棵子树如果在前面就遍历节点中所有的包围盒进行遮挡剔除如果物体已经被视锥体剔除了那么这个物体就直接跳过物体通过遮挡剔除后加入到渲染队列中以主角为中心使用均匀网格在其周围生成动态的物件比如行驶的汽车和行人如果汽车和行人离开一定范围那么这些动态物件将会被消耗使用对象缓存技术防止频繁的对动态物体进行遮挡查询之前那些大型的静态物体现在就变成了遮挡体所以对于动态的物体无需排序因为它们都是小物件将测试通过的动态物体加入到渲染队列中将透明物体加入到渲染队列中先用八叉树对物体进行粗粒度剔除然后再用树进行粗粒度剔除在做遮挡剔除之前会对物体做视锥体剔除如果通过视锥体测试并且通过了遮挡剔除那么这个物体将会被渲染对于动态物体我们使用均匀网格控制它们的创建和销毁没必要整个世界中的动态物体都一直存在因为动态物体都是小物件没必要对他们进行排序以进行正确的遮挡剔除小物件之间的遮挡就没必要测试了之前的静态物体已经变成了遮挡体动态物体可以根据这些遮挡体进行剔除',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-04 03:56:33',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://npm.elemecdn.com/anzhiyu-blog-static@1.0.4/img/avatar.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">恒逸的博客</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" target="_blank"><img class="post-qr-code-img" alt="微信" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/%E4%B8%AD%E7%BA%A7/" style="font-size: 1.05rem;">中级<sup>7</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/09/"><span class="card-archive-list-date">九月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="article-meta tags"><a class="article-meta__tags" href="/tags/%E4%B8%AD%E7%BA%A7/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>中级</span></a></span></div></div><h1 class="post-title" itemprop="name headline">游戏场景管理--空间划分</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-10-03T19:49:48.000Z" title="发表于 2025-10-04 03:49:48">2025-10-04</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-10-03T19:56:33.890Z" title="更新于 2025-10-04 03:56:33">2025-10-04</time></span></div><div class="meta-secondline"><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为长沙"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>长沙</span></div></div></div><article class="post-content" id="article-container" itemscope itemtype="http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/"><header><a href="/tags/%E4%B8%AD%E7%BA%A7/" tabindex="-1" itemprop="url">中级</a><h1 id="CrawlerTitle" itemprop="name headline">游戏场景管理--空间划分</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">恒逸</span><time itemprop="dateCreated datePublished" datetime="2025-10-03T19:49:48.000Z" title="发表于 2025-10-04 03:49:48">2025-10-04</time><time itemprop="dateCreated datePublished" datetime="2025-10-03T19:56:33.890Z" title="更新于 2025-10-04 03:56:33">2025-10-04</time></header><h2 id="一-前言"><a href="#一-前言" class="headerlink" title="一 前言"></a>一 前言</h2><p>空间划分算法有很多，比如均匀网格，四&#x2F;八叉树，k-d树，Bsp树，每一种算法都有自己的优缺点，我们需要从理论上理解这些算法，然后在实际项目中进行灵活的运用。</p>
+<p>游戏中经常使用空间划分算法来优化碰撞，视锥体剔除，邻近查询，因此每当我们讨论一个算法的时候都会从这三方面进行探讨。另外我们还将考虑静态对象和动态对象对算法的影响，主要体现在空间节点的快速更新能力，以及对象快速变更节点的能力。<br>二 均匀网格</p>
+<p>我们可以把游戏场景均匀的划分成一个个小的网格如下图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/dab5e7a6e8bbd772660797369753b5c8.png" alt="img"></p>
+<p>我们先简化讨论的情况，假定：</p>
+<p>场景对象的坐标是中心位置坐标<br>场景对象的包围盒小于单位网格的尺寸<br>场景对象每帧只做部分对象的碰撞检测<br>那么碰撞检查只需要在对象中心坐标所属的网格及邻近网格之间进行相交测试，也就是在九宫格中进行碰撞检查。</p>
+<p>为什么会得出这个结论呢？大家可以在纸上画一下，因为对象的包围盒小于单位网格，即便它在网格的边界处也无法超出邻近网格的范围。</p>
+<p>假定场景被划分成50*50&#x3D;2500个网格，我们可以根据对象的坐标快速的定位所属及相邻的9个网格。碰撞检测只需要拿出这9个网格中的对象，然后进行相交测试，这样就快速的排除了2491个网格（大部分空间），因此这个算法非常适合碰撞检测及邻近查询。但它对视锥体剔除并不友好，我们需要遍历大量的网格，检测它是否在视锥体中，这个算法并不高效。</p>
+<p>对于移动的对象，我们不需要重新划分网格，而且也可以快速的进行网格变更，因此该算法对移动的对象特别友好。</p>
+<p>综上所述，均匀网格算法特别适合做碰撞检测及邻近查询，不适合做视锥体剔除，对静态对象及动态对象特别友好。</p>
+<p>所有的一切都基于我们之前的假定，但是如果场景中存在比较大的对象，我们就必须扩大单位网格的尺寸，我们希望可以不受对象的限制，合理的分配单位网格的尺寸，如何做到呢？</p>
+<p>对大型模型进行切割，用更多小的包围体拆解模型<br>使用层次网格<br>ok，我们暂时先不讨论复杂的大型对象，让我们看看均匀网格的实现需要注意哪些问题。</p>
+<p>我们需要选择一套数据结构来存储网格及对象，这里要思考静态场景和动态场景的区别，让我们先从简单的静态场景说起。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/d7e40da56af102baf9582db9f73b8caa.png" alt="img"></p>
+<p>如上图a我们可以用数组下标来代表网格，数组里面存储一个指针，这个指针指向链表的表头。链表中的每一个元素就是网格中的场景对象。这套数据结构不仅可以支持静态场景，还可以支持动态场景，因为随时可以对链表进行增加或删除。但是方案a并不是一个高效的数据结构，因为它用链表来存储对象，会造成内存的浪费，也会降低cpu cache的命中。</p>
+<p>方案b用数组取代了链表来存储场景中的对象。数组是一块连续的内存地址，可以提高cpu cache的命中，而且相对于链表可以节省内存空间。每一个网格需要记录存储对象的其实位置，以及所属对象的个数。这需要遍历两次场景第一次确定每个网格的对象数量及对象的总数，第二次遍历分配场景对象。方案b适合静态场景，并且可以离线预处理。</p>
+<p>在实际应用中我们往往使用均匀网格处理动态场景，比如MMORPG中管理角色，怪物，npc。</p>
+<p>之前介绍的a方案是可以支持动态场景的，但它的效率不高。因为存储对象的数据结构是单向链表，我们插入一个对象的时间复杂度是O(1)，查询和删除的时间复杂是O(n)。我们希望查询和删除的时间复杂度也是O(1)。我们可以在对象内部保存链表元素的指针，这样就可以快速的定位元素进行查找和删除操作了。</p>
+<p>假设我们的场景很大比如吃鸡游戏，但是场景中的角色数量不多，也就是说场景中大部分网格都是空的，如果为每一个网格分配内存即便是使用数组也是极大的内存浪费。我们希望分配的内存与对象的数量有关和单位网格的尺寸无关(听起来像延迟光照），这就需要请出哈希大神了。我们可以通过一个哈希函数，将网格映射到一个0~n的数组中，如下图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/06b15e5eeddcd39b749a6a52aaa9f5b8.png" alt="img"></p>
+<p>使用哈希表可以大大节省内存空间，但是要解决哈希冲突，如上图有两个网格被分配到了1中。解决哈希冲突又三种方法：</p>
+<p>开放寻址法<br>再散列法<br>链地址法<br>开放寻址法简单理解就是如果发生冲突，那么就重新寻找一个合适的空位，如何寻找合适的空位可以用线性探测，二次探测，伪随机探测等多种方法，开放寻址法是一种封闭式的散列表，因为它没有开辟新的内存空间。封闭式散列法如果所有的空间都被占用了该怎么办，要么报错，要么开辟一个更大的空间然后进行大量copy，这里就不详细的展开了。</p>
+<p>再散列法其实和开放寻址法差别不大，只是遇到冲突后，需要使用另一个散列函数重新分配，直到冲突不再发生，这种方法不容易产生聚集，但是会耗费更多的计算时间。该方法也是封闭式散列表。</p>
+<p>链地址法和我们上面提到的网格下面挂一个链表很相似，如果发生冲突就在冲突的位置挂一个链表，然后把链表的头指向新插入的元素。这是一种开放式的散列表，因为每当发生冲突的时候都会开辟新的内存空间用来存储元素。</p>
+<p>之前我们把场景对象都看成是一个点，所以每个对象只存储在一个网格中。如果对象是一个包围盒，那么与包围盒相交的每一个网格都需要存储场景对象。如果包围盒占据4*4的网格那么它就需要在16个网格中记录对象。这不仅浪费内存空间，还会降低对象插入的速度。为了改善这种情况我们可以按照下图的方式组织对象：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/1e551af51f4a6406c56935b209a706d1.png" alt="img"></p>
+<p>每一个行和列都存储一个链表，这样如果包围盒占据4*4的网格那么它只需要存储在4+4个网格中。对象的相交测试通过下列方式实现：考查该对象是否与其交叠的行网格单元和列网格单元的其他对象相交。这个方案可以改善最化的插入操作，但是当对象只是与少数网格交叠的时候相交测试的开销反而会变大。</p>
+<p>一种较为新颖的存储算法是采用如下方案：针对网格的每一行和每一列及场景对象的数量，分配一个1位数组。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/9cff4352fe3b23ebeef05346e3908191.png" alt="img"></p>
+<p>上图中有5个对象，所以每一行和每一列都有一个5位二进制数用来标记它们是否和网格相交。我们看第一行，它与4和3相交，那么第5位和第4位置1。再看第一列，它与4相交，那么第5位置1。我们要想看看第一行第一列的网格中有哪些对象，只需要将行和列的二进制数进行and操作。 </p>
+<p>11000 &amp; 10000 &#x3D; 10000，第5位是1其他位是0，说明4号对象在这个网格中（第五位代表4号对象，第一位代表0号对象）。</p>
+<p>我们要想获得对象碰撞的潜在集合，只需要看看该对象占用的每一个网格上还有哪些对象，公式如下：</p>
+<p>b &#x3D; (r[i] &amp; c[j]) | (r[i] &amp; c[j+1]) | (r[i+1] &amp; c[j]) | (r[i+1] &amp; c[j+1])</p>
+<p>上面的公式可以简化为：</p>
+<p>b &#x3D; (r[i] | r[i+1]) &amp; (c[j] | c[j+1])</p>
+<p>我们看看2号对象和哪些对象有可能相交，2号对象占据了3，4行及3，4列。</p>
+<p>(00100 | 00101) &amp; (00110 | 00101) &#x3D; 00101 结果显示第1位和第3位为1，也就是0号对象和3号对象有可能相交。</p>
+<p>我能来总结一下每一套数据结构占用内存的大小，如下图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/cf1c724fc0c6c61fbca4007c181eb149.png" alt="img"></p>
+<p>第一套是使用位数组，可以看到这套方案大部分情况下占用的内存都是最少的，只有在对象到达10000的时候内存才飙升上来。</p>
+<p>第二套是紧凑数组+双向链表，可以看到这套数据结构大部分情况下占用的内存都是最高的。</p>
+<p>第三套是哈希表+双向链表，可以看到这套数据结构的内存占用与对象的数量息息相关，对象数量越多，占用的内存越高。</p>
+<h3 id="假定我们在每帧中只测试部分对象"><a href="#假定我们在每帧中只测试部分对象" class="headerlink" title="假定我们在每帧中只测试部分对象"></a>假定我们在每帧中只测试部分对象</h3><p>如果我们使用点代表对象，我们需要与所有的邻接网格进行测试，也就是9宫格。</p>
+<p>如果我们使用AABB包围盒的最小顶点代表对象，我们可以采用如下算法优化测试：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/80054e0bba35b8b27735887f4679d04a.png" alt="img"></p>
+<p>最好的情况是4次测试，最坏的情况是9次测试。</p>
+<p>如果我们用AABB包围盒代表对象，也就是说与AABB相交的网格都包含对象，我们可以使用更快速的测试算法：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/51699b4ba9ea758794ddeb21dfd17016.png" alt="img"></p>
+<p>最好的情况1次测试，最坏的情况4次测试。虽然加速了碰撞测试的速度，却增大了内存，而且还降低了对象移动更新的效率，因为点的更新速度要比包围盒快很多。所以每一种算法我们都需要根据实际情况进行权衡。</p>
+<h3 id="假定每帧我们测试全部对象"><a href="#假定每帧我们测试全部对象" class="headerlink" title="假定每帧我们测试全部对象"></a>假定每帧我们测试全部对象</h3><p>我们可以想象一下A与B相交和B与A相交是一样的测试结果。假如A在B的左侧，那么B只需要检测右边的邻接网格就可以了，因为左边的邻接网格由A的碰撞检测来完成。因此假定我们以点来表示对象，那么碰撞检测可以优化为5次碰撞：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/ef8c8a770aebcf4f32e0bb97cf4957ac.png" alt="img"></p>
+<p>如果采用AABB最小顶来测试那么测试算法和采用AABB测试时一样的</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/e2d4d39831f415ab10302aa58e51b7b8.png" alt="img"></p>
+<h3 id="其他优化事项"><a href="#其他优化事项" class="headerlink" title="其他优化事项"></a>其他优化事项</h3><p>如果网格存储的对象，大部分都是移动的，那么重新分配所有对象，要比更新所有对象效率更好。既然不更新对象，我们就可以使用单链表这种更简洁的数据结构表示对象。</p>
+<p>如果存储的对象的直径小于网格的二分之一，我们可以采用6边形网格如下图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/faba63620b0e83e2aad07ee72a616cf0.png" alt="img"></p>
+<p>可以看到如果采用中心代表对象，b方案只需要测试7(9)个网格，如果采用最小顶点测试方案b方案需要测试4(5)个网格。</p>
+<p>另外这种6边形网格可以提高射线碰撞的测试效率。</p>
+<h3 id="层次网格"><a href="#层次网格" class="headerlink" title="层次网格"></a>层次网格</h3><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/54d048ccd8cad9c32fb4edc4cc928f92.png" alt="img"></p>
+<p> 如果场景中存在比较大的对象，就需要使用层次网格来存储不同大小的对象。在每个层上对象的直径将小于单位网格直径。</p>
+<p>层次网格和四&#x2F;八叉树很像，只是没有树顶节点。因为层次网格的深度小于树的深度，所有由更好遍历效率。</p>
+<p>如果每一帧所有对象都进行测试，测试过程无须处理层次网格的各个层，每个对象从插入层开始测试，并遵循下列原则:较小的对象与较大对象所处的层进行测试。</p>
+<p>但是如果每一帧只有部分对象进行测试，那么对象就需要和所有层的对象进行测试，这是非常浪费效率的做法。</p>
+<p>总结一下均匀网格和层次网格。</p>
+<h3 id="均匀网格"><a href="#均匀网格" class="headerlink" title="均匀网格"></a>均匀网格</h3><p>均匀网格不适合做视锥体剔除，第一均匀网格没有层的概念不能快速剔除大片物体，第二均匀网格很难处理大小不一的世界，游戏场景往往就是由大小不一的物体组成的。总之没有人用均匀网格进行视锥体剔除。</p>
+<p>如果是碰撞检测，均匀网格限制太多，首先要求物体的直径小于单位网格的直径（这个要求是为了高效碰撞检测），这往往不能满足游戏的场景碰撞，我们不可能让一个子弹打到墙上不消失吧。但是如果可以满足均匀网格的限制，碰撞检测的效率是最高的，而且对动态碰撞特别友好。如果是塔防游戏，子弹不会和场景碰撞，只和移动的敌人碰撞，那么就非常适合用均匀网格进行碰撞检测。</p>
+<p>均匀网格非常适合做邻近查询，因为邻近查询没有体积的概念，只代表一个点。服务器的广播策略，往往就是用均匀网格做的。因此以后就不讨论邻近查询了，因为其他的算法都不如均匀网格。</p>
+<h3 id="层次网格-1"><a href="#层次网格-1" class="headerlink" title="层次网格"></a>层次网格</h3><p>层次网格可以通过上层网格进行大面积的视锥体剔除，也可以处理大小不一的世界。但是视锥体剔除与碰撞检测有一个很重要的区别，视锥体剔除要求单位网格完全包住物体，否则物体将会被错误的剔除掉（明明能够看见，但是被剔除了）。如果一个物体在多个网格的交界处，那么这个物体就需要被所有网格包含，只有所有网格被剔除那么这个物体才会被剔除，这样无疑增加了剔除的复杂度。如果把物体提升到上层处理，那么就有违层次包围盒最原始的设计理念，上层的物体是因为尺寸才被提升的，而不是因为物体在网格的交界处。所以视锥体剔除更适合使用四&#x2F;八叉树进行。其实层次网格和四&#x2F;八叉树在结构上很相似，但是在构建的过程却差别很大，完全是不同的思想。</p>
+<p>在碰撞检测上，层次包围盒基本上可以满足场景碰撞，但是层次网格不太擅长处理世界场景中包含大量分布不均匀的小型静态物体。如果底层的网格使用密集型网格存储（数组）内存开销会很昂贵，如果使用哈希结构存储会导致额外的计算及降低cache命中。可以考虑其他类型的层次网格计算，这里我没有继续研究，因为我目前主要的工作是渲染向，具体可以参考递归网格算法[Jevans89]， 均匀层次网格[Cazals95] ，适应性网格[Klimaszewski97]， [Havran99]。</p>
+<p>题外话，现在都强调不要造轮子，有那么多牛逼的物理库，还研究这些东西干什么。我个人觉得不要造轮子这句话的意思是尽量使用成熟的第三方库，但从来没有让你放弃学习内部的原理。有些东西知道理论是一回事，实践过是另外一回事，真想做好技术还真要自己造轮子，Don’t listen to what others say, just follow your heart。</p>
+<h2 id="二-四-八叉树"><a href="#二-四-八叉树" class="headerlink" title="二 四&#x2F;八叉树"></a>二 四&#x2F;八叉树</h2><p>四叉树理解起来很简单，把蛋糕均匀的切成四份，然后再递归的把每一份切成四份，这样就形成了一棵含有四个子节点的四叉树。八叉树同理就是切成八份。可以想象四&#x2F;八叉树把空间划分成了很多房间，每个房间中的对象都挂在相应的节点上。递归结束的条件有两种一种是规定树的最大深度，另一种是一直切到每个房间中的对象个数小于某一个阈值。无论是层次网格还是四&#x2F;八叉树，都会遇到一个问题如下图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/af970a062d16a00b5dc4d103133f80be.png" alt="img"></p>
+<p>图中灰色的圆球分布在多个网格的交界处，这些圆球到底应该分配到哪个房间中呢？</p>
+<p>有两种处理方法一种是每个网格都包含圆球，另一种是把圆球存储到上层节点中（其实还有一个办法就是把求分割了）。</p>
+<p>存储到多个网格的弊端我们之前已经讨论了，把圆球存储到上层节点有什么问题么？如果一个很小的圆球恰好在世界的中心，那么它就会被分配到最上层的根节点。视锥体是无法通过四&#x2F;八叉树剔除这个圆球的，因为它在最上层的根节点中。同理上面那些灰色的圆球很有可能因为存放在上层空间而无法被剔除，即便它们是很小的物体。这是一个无法彻底解决的问题，但是我们至少让那些小的物体下降到更低的层上，从而让他们能够被正确的剔除。这就需要使用松散四&#x2F;八叉树。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/e29bd50de8b8c1793c1d89f009e02b26.png" alt="img"></p>
+<p>松散四叉树就是适当的扩大每一个网格的尺寸如上图，这样就可以把那些处在边界的小物体囊括到网格中。使用松散四叉树可以让大部分小物体下降到更低的层次，但是有一些真的很大并且在边界的物体依然会被分配到了上层空间中。使用松散四叉树虽然让很多物体下降到了更低的层次，但是空间网格被放大了，如果相机在网格的边缘，原先会被整体剔除的网格现在无法被剔除了，没有完美的结局，只有最适合的结局。</p>
+<p>四&#x2F;八叉树很适合做视锥体剔除，相机可以从根节点遍历树，如果节点被剔除，那么房间中的所有对象都会被剔除。</p>
+<p>假定每个对象都被空间节点完全包裹，那么一个房间中的对象就只会和这个房间中的对象发生碰撞，另外处于同一空间中的父子节点也可能发生碰撞。简单的说碰撞检测就是当前节点及父子节点中的对象进行相交测是，这个有点类似层次网格，只是不需要再检测邻接节点了。</p>
+<p>让我们来看看八叉树的存储结构，如下图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/372150be6fb647e446b3cb099618f822.png" alt="img"></p>
+<p>节点的中心位置，节点的半径，指向子节点的指针，指向对象的表头指针，这是最简单的八叉树存储结构。如果八叉树是满树，也就是每个节点都包含8个子节点，那么我们也可以使用数组表示八叉树，这种数据结构更紧密。若树节点存储于数组node[N]中，则针对某一父节点node[i]，其八叉树的子节点可以表示为node[8<em>i + 1] ~ node[8</em>i + 8]。一个7层的完全八叉树最多包含300000个节点，空间消耗太昂贵了，所以要控制满树的层数，最多不要超过6层。对于动态的八叉树，随着物体的移动八叉树的结构会发生变化，是不是可以直接使用满树来避免树结构的变化，虽然浪费了内存，却换取了计算的时间。</p>
+<p>现在高效的做法都是使用哈希存储的线性树，存储结构如下图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/fbe2f5cab8a4b3c882e668c69606c109.png" alt="img"></p>
+<p>相对于指针八叉树，每个节点节省了很多内存空间，这些节点会根据key值存储到哈希表中。这样访问节点的速度就从原先的O(logn)变成了O(1)。即节省了内存空间又提升了访问速度，两全其美的优化，吃起来很香。这里神秘的key是什么？它叫Morton code。</p>
+<p>Morton order or Morton code map multidimensional data to one dimension while preserving locality of the data points.</p>
+<p>莫顿序或莫顿码将多维数据映射到一维，同时保持数据点的局部性。这句话听起来好高大上，让我们用通俗的语言来解释它。</p>
+<p>假设我们使用的是四叉树，四叉树中的每一个网格都对应了一个位置坐标(x,y)，相当于二维数组的下标，我们把每个节点存储在一个二维数组中，那么根据这组坐标就可以确定节点的位置了。我们希望把这个二维数据(x,y)映射到一维数据中，这就好比将二维数组转换为一维数组，key &#x3D; x * row_length + y。这里的（x,y)-&gt;key，就是morton code前半段话的意思。同时又保持数据节点的局部性这句话怎么解释呢？我们来看一张图</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/e58fcec242afc72994dba4514736aed6.png" alt="img"></p>
+<p>我们可以看到第一张图是一个Z，后面的图都是由Z组成的二维空间，三维空间。这里的局部型就是这个Z，这个曲线也就是Z-order curve曲线。这是感性的认识，让我们理性的看清它的真面目，如下图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/25c7ae3dc3b3fc8f543e47734124c58b.png" alt="img"></p>
+<p>这里有64个节点，相当于四叉树的所有叶子节点。看看0,1,2,3的排列顺序是不是一个Z型，如果0,1,2,3看成是一个点，那么它所属的上层空间(4,5,6,7)（8,9,10,11) (12,13,14,15)组成的是不是也是一个Z型。为什么是Z型不是U型呢。看下面一张图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/d42c8cd99db5d2f90f2b05213307bb55.png" alt="img"></p>
+<p>我们只需要将x,y的二进制码交替组合就可以得出key值（y是奇数位，x是偶数位)。对于一棵八叉树，我们可以用3位代表子节点的位置（0~7)，int是32位，可以代表一个10层的八叉树。为了能够区分011和000011我们需要在前面加上一个1，1011，1000011。这样我们就可以根据key值来计算出这个节点是在第几层，代码如下：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/ada5b5b1f17afdc6d7db4db93d1d8437.png" alt="img"></p>
+<p>已知父节点的位置码，我们可以方便的计算出子节点的位置码childkey &#x3D; (parentkey &lt;&lt; 3) + childIndex。</p>
+<p>已知子节点的位置码我们可以方便的得出父节点的位置码parentkey &#x3D; childkey &gt;&gt; 3。</p>
+<p>我们将位置码做为哈希表的key，这样我们就可以快速的访问八叉树的每一个节点了。</p>
+<p>坐标转换 世界坐标-&gt;网格坐标(整型)-&gt;key。</p>
+<h2 id="三-k-d树"><a href="#三-k-d树" class="headerlink" title="三 k-d树"></a>三 k-d树</h2><p>k-d树是将k维空间中的点进行分割的数据结构，k代表子划分空间的数量，d是dimension(维度)的意思，k-d树是bsp树的一种，另一种解释是k-d树是二分查找树在k维空间的泛化。</p>
+<p>k-d树在一维空间是一棵二分查找树</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/dc64d96abee21800b4c9f98f489cafc5.png" alt="img"></p>
+<p>k-d树每次只会选取一个基轴方向进行分割，比如二维空间中先沿x方向分割，然后再沿y轴方向分割，以此循环。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/0defa4b98ba255c02b4d3977ed3d951a.png" alt="img"></p>
+<p> k-d数的建树过程分两步</p>
+<p>选哪一个轴进行分割<br>沿分割轴方向上的哪个点进行分割<br>将中值左侧的数据挂在左子树，右侧的数据挂在右子树<br>我们希望构建的树尽量是平衡树而不是一个退化的链表如下图，因此常用的分割策略是：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/0acf4c62ad83645dbcf03226e86ef8a5.png" alt="img"></p>
+<p>对比数据点在各维度的分布情况，数据点在某一维度坐标值的方差越大分布越分散，方差越小分布越集中。从方差大的维度开始切分可以取得很好的切分效果及平衡性。<br>选分割轴上的中值（中间的点）进行分割<br>k-d树可以做精确查找，也可以做范围查询，当然还可以做视锥体剔除，碰撞检测，确定渲染顺序，因为它也是一棵bsp树。</p>
+<p>k-d树最强大的地方是它能对多个维度进行范围查询，比如想要查找年龄在20岁以上并且身高在170到180之间的所有人，用K-D树就能很好的解决。</p>
+<p>由于K-D树的结构要求，上面的例子中要求每个人的年龄和身高各项数据必须齐全，如果某个人只有年龄或只有身高，就无法使用K-D树索引了。所以实际上K-D树更常见的应用是经纬度定位，或者三维空间定位(某个维度数据缺失，其他维度数据也就没有意义了)</p>
+<p>高纬度数据查找效率并不一定好，有时候可能不如最原始的暴力查找。通常，如果维度为k，则k-d树中的点数N应远远大于2的k次方。否则查找时，节点中大多数节点都会被遍历到，效率上还不如原始的遍历。</p>
+<p>说到邻近查询，我们就会和均匀网格进行比较，从查找的效率来看，我个人觉得均匀网格会更快，首先确定附近空间，均匀网格的查找复杂度是O(1)而k-d的复杂度是O(logn)，其次动态生成k-d树是非常耗时的，所以k-d树不适合动态场景。k-d树的应用场景更多的应该是在多维度，以及可以是任意数据，比如年龄，身高，体重，财富等等。在游戏中k-d树并不是为了邻近查询，当然它也可以做邻近查询。比如遮挡剔除，需要按照由前到后的顺序渲染，这时候就可以使用k-d树，因为k-d树是bsp树，它可以提供任意视点的渲染顺序。</p>
+<h2 id="四-bsp树"><a href="#四-bsp树" class="headerlink" title="四 bsp树"></a>四 bsp树</h2><p>bsp树是所有空间划分中最复杂的一种树形结构，它采用任意位置，方向的分割面递归地将空间划分成多个子空间对。对于n维空间，其分割面则为(n-1)维的超平面。之前说的k-d树就是bsp树的一种，它的划分面是平行于每个轴的面。</p>
+<p>bsp树复杂就复杂在它太灵活，一个任意位置，方向的分割面就会让我们不知所措。其实也不是任意的了，每个划分都是为了达到某个目标，这里的任意其实可以理解为手动取选择分割面。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/d42746ecac3ed83fdcd4161eb7d98e52.png" alt="img"></p>
+<p>你可以使用bsp树来切割空间如图a，也可以使用bsp树来区分一个复杂多边形的内外区域，如图b。</p>
+<p>bsp最初的设计需求是为了对渲染多边形进行排序，参考画家算法，因为当时z-buffer是一个非常昂贵的操作。</p>
+<p>bsp的视锥体剔除技术和四&#x2F;八叉树完全不一样，因此它们一个适合室外，一个适合室内。</p>
+<p>四&#x2F;八叉树的算法决定了它适合广阔的室外场景，而bsp技术则适合有很多房间的室内场景，因为房间中有很多墙，这些墙可以遮挡大片的物体。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/55a6be3105590c27f50d1b9872e98a22.png" alt="img"></p>
+<p>如上图，平面3位于视点的背面，那么3所有的子节点包含的物体都不会被相机看到，这些物体就可以快速的剔除掉。</p>
+<p>这就是bsp的背面剔除技术，这里的背面剔除技术不是通过绕序进行裁剪的背面剔除。通过绕序进行裁剪的背面剔除，只需要考虑眼睛的位置，而bsp背面剔除技术需要考虑视点的位置以及视线的朝向还有视锥体的fov。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/33b5ba5b8efa63e3c3814f22aea1f32e.png" alt="img"></p>
+<p>上图是计算背面剔除的方法，我就不详细介绍了，希望了解算法详情的参见《3D游戏大师编程技巧》一书。</p>
+<p>做室内游戏，往往需要配一个关卡编辑器，这个编辑器应该有一个功能就是把室内场景中的房间的墙设定成bsp的分割面，然后将场景中的静态物体通过这些分割面生成一棵bsp树。这样就可以进行视锥体剔除了。当然手动设置分割面是一个很低效的做法，自动分割的算法很复杂，需要不停的试探找到一个最优解，因此bsp树通常是在离线预处理。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/7db4932f765f72a1e4753fb4625f6944.png" alt="img"></p>
+<p>上图是一个凹面体，我们可以使用bsp树来把这个凹面体的内外区域标记出来，一个点从树根处开始遍历，一直找到叶子节点，这样就可以确定这个点是不是在凹面体中了。</p>
+<p>bsp树的理论其实并不复杂，复杂在实现上，这里就不更多的介绍了。</p>
+<h2 id="五-混合使用"><a href="#五-混合使用" class="headerlink" title="五 混合使用"></a>五 混合使用</h2><p>很多时候我们可以混合使用空间划分算法，比如我们可以先将场景按照均匀网格划分，然后每一个网格再按照树型结构划分，这样就形成了一个森林。再比如我们可以通过均匀网格快速的定位一棵树的节点，这样可以加速树的访问，如下图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/b21b7e512e3e9b43e0a0cf565bc55cb7.png" alt="img"></p>
+<p>我们假设如果要做GTA5这样的游戏该如何进行场景管理呢？我们先约定一下需求</p>
+<p>GTA5中静态场景非常庞大，场景里面有许多的高楼大厦。<br>GTA5里面有许多动态的物体比如汽车，npc而且数量庞大。<br>再也没有比GTA5更复杂的场景了，我也只是浅浅的做一下个人分析，算是对学习的小结。</p>
+<p>复杂的城市场景一定要使用遮挡剔除技术，使用遮挡剔除就需要对渲染体进行从前往后的排序。<br>需要一种快速的剔除技术，剔除大量看不见的静态物体。<br>离线准备工作</p>
+<p>为场景中的静态物体分配AABB包围盒，一些小的离的近的物体可以分配到一个包围盒中。为场景中所有不透明物体生成一棵k-d树。<br>使用八叉树划分静态场景。<br>实现</p>
+<p>使用八叉树进行视锥体剔除，将被剔除的物体进行标记。<br>使用k-d树按照从前往后的顺序遍历场景，首先判断节点是否在视线的背面，如果在背面就剔除这棵子树。如果在前面就遍历节点中所有的包围盒进行遮挡剔除，如果物体已经被视锥体剔除了，那么这个物体就直接跳过。物体通过遮挡剔除后加入到渲染队列中。<br>以主角为中心，使用均匀网格在其周围生成动态的物件，比如行驶的汽车和行人。如果汽车和行人离开一定范围，那么这些动态物件将会被消耗（使用对象缓存技术，防止频繁的gc)。<br>对动态物体进行遮挡查询，之前那些大型的静态物体现在就变成了遮挡体，所以对于动态的物体无需排序，因为它们都是小物件，将测试通过的动态物体加入到渲染队列中。<br>将透明物体加入到渲染队列中。<br>先用八叉树对物体进行粗粒度剔除，然后再用k-d树进行粗粒度剔除，在做遮挡剔除之前，会对物体做视锥体剔除，如果通过视锥体测试，并且通过了遮挡剔除，那么这个物体将会被渲染。对于动态物体我们使用均匀网格控制它们的创建和销毁，没必要整个世界中的动态物体都一直存在。因为动态物体都是小物件，没必要对他们进行排序以进行正确的遮挡剔除，小物件之间的遮挡就没必要测试了。之前的静态物体已经变成了遮挡体，动态物体可以根据这些遮挡体进行剔除。</p>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">恒逸</div><div class="post-copyright__author_desc">慢慢来比较快</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/')">游戏场景管理--空间划分</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=undefined&amp;url=http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/&amp;pic=undefined" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">恒逸的博客</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/%E4%B8%AD%E7%BA%A7/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>中级<span class="tagsPageCount">7</span></a></div></div></div><div class="post_share"><div class="social-share" data-image="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/10/04/SLG%E5%A4%A7%E5%9C%B0%E5%9B%BE%E7%9A%84%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">SLG大地图的管理方案</div></div></a></div><div class="next-post pull-right"><a href="/2025/10/04/%E5%B8%A7%E5%90%8C%E6%AD%A5/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">帧同步</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="anzhiyufont anzhiyu-icon-thumbs-up fa-fw" style="font-size: 1.5rem; margin-right: 4px"></i><span>喜欢这篇文章的人也看了</span></div><div class="relatedPosts-list"><div><a href="/2025/09/20/%E7%BA%A2%E7%82%B9%E7%B3%BB%E7%BB%9F/" title="红点系统"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-09-20</div><div class="title">红点系统</div></div></a></div><div><a href="/2025/09/22/%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="事件系统"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-09-22</div><div class="title">事件系统</div></div></a></div><div><a href="/2025/09/23/%E6%96%B0%E6%89%8B%E5%BC%95%E5%AF%BC/" title="新手引导"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-09-23</div><div class="title">新手引导</div></div></a></div><div><a href="/2025/10/04/SLG%E5%A4%A7%E5%9C%B0%E5%9B%BE%E7%9A%84%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88/" title="SLG大地图的管理方案"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-10-04</div><div class="title">SLG大地图的管理方案</div></div></a></div><div><a href="/2025/10/04/%E5%B8%A7%E5%90%8C%E6%AD%A5/" title="帧同步"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-10-04</div><div class="title">帧同步</div></div></a></div><div><a href="/2025/10/04/%E7%BA%A2%E7%82%B9%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F%E4%BB%A5%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" title="红点系统的前世今生以及相关注意事项"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-10-04</div><div class="title">红点系统的前世今生以及相关注意事项</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description"></div></div></div><div class="card-widget anzhiyu-right-widget" id="card-wechat" onclick="null"><div id="flip-wrapper"><div id="flip-content"><div class="face" style="background: url(https://bu.dusays.com/2023/01/13/63c02edf44033.png) center center / 100% no-repeat"></div><div class="back face" style="background: url(https://bu.dusays.com/2023/05/13/645fa415e8694.png) center center / 100% no-repeat"></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">一 前言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%87%E5%AE%9A%E6%88%91%E4%BB%AC%E5%9C%A8%E6%AF%8F%E5%B8%A7%E4%B8%AD%E5%8F%AA%E6%B5%8B%E8%AF%95%E9%83%A8%E5%88%86%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.1.</span> <span class="toc-text">假定我们在每帧中只测试部分对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%87%E5%AE%9A%E6%AF%8F%E5%B8%A7%E6%88%91%E4%BB%AC%E6%B5%8B%E8%AF%95%E5%85%A8%E9%83%A8%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.2.</span> <span class="toc-text">假定每帧我们测试全部对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96%E4%BA%8B%E9%A1%B9"><span class="toc-number">1.3.</span> <span class="toc-text">其他优化事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%82%E6%AC%A1%E7%BD%91%E6%A0%BC"><span class="toc-number">1.4.</span> <span class="toc-text">层次网格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9D%87%E5%8C%80%E7%BD%91%E6%A0%BC"><span class="toc-number">1.5.</span> <span class="toc-text">均匀网格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%82%E6%AC%A1%E7%BD%91%E6%A0%BC-1"><span class="toc-number">1.6.</span> <span class="toc-text">层次网格</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E5%9B%9B-%E5%85%AB%E5%8F%89%E6%A0%91"><span class="toc-number">2.</span> <span class="toc-text">二 四&#x2F;八叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-k-d%E6%A0%91"><span class="toc-number">3.</span> <span class="toc-text">三 k-d树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-bsp%E6%A0%91"><span class="toc-number">4.</span> <span class="toc-text">四 bsp树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94-%E6%B7%B7%E5%90%88%E4%BD%BF%E7%94%A8"><span class="toc-number">5.</span> <span class="toc-text">五 混合使用</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/04/%E7%BA%A2%E7%82%B9%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F%E4%BB%A5%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" title="红点系统的前世今生以及相关注意事项">红点系统的前世今生以及相关注意事项</a><time datetime="2025-10-03T20:59:12.000Z" title="发表于 2025-10-04 04:59:12">2025-10-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/04/%E5%B8%A7%E5%90%8C%E6%AD%A5/" title="帧同步">帧同步</a><time datetime="2025-10-03T20:56:58.000Z" title="发表于 2025-10-04 04:56:58">2025-10-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/" title="游戏场景管理--空间划分">游戏场景管理--空间划分</a><time datetime="2025-10-03T19:49:48.000Z" title="发表于 2025-10-04 03:49:48">2025-10-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/04/SLG%E5%A4%A7%E5%9C%B0%E5%9B%BE%E7%9A%84%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88/" title="SLG大地图的管理方案">SLG大地图的管理方案</a><time datetime="2025-10-03T17:48:58.000Z" title="发表于 2025-10-04 01:48:58">2025-10-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/23/%E6%96%B0%E6%89%8B%E5%BC%95%E5%AF%BC/" title="新手引导">新手引导</a><time datetime="2025-09-23T15:52:17.000Z" title="发表于 2025-09-23 23:52:17">2025-09-23</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2025 By <a class="footer-bar-link" href="/" title="恒逸" target="_blank">恒逸</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">0</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://image.anheyu.com/" title="安知鱼图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="安知鱼图床"/><span class="back-menu-item-text">安知鱼图床</span></a></div></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/%E4%B8%AD%E7%BA%A7/" style="font-size: 0.88rem;">中级<sup>7</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="14311864028" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random" volume="0.7"></meting-js></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://music.163.com/#/playlist?id=14311864028&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("09/20/2025 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2025 By 安知鱼 V1.6.14",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 恒逸 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>

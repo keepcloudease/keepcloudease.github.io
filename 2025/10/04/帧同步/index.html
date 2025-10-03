@@ -1,0 +1,410 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>帧同步 | 恒逸的博客</title><meta name="keywords" content="中级"><meta name="author" content="恒逸"><meta name="copyright" content="恒逸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="帧同步"><meta name="application-name" content="帧同步"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="帧同步"><meta property="og:url" content="http://example.com/2025/10/04/%E5%B8%A7%E5%90%8C%E6%AD%A5/index.html"><meta property="og:site_name" content="恒逸的博客"><meta property="og:description" content="大白话说懂“帧同步”，以王者荣耀为例“网络很卡，英雄动不了。” “我按技能了啊！可ping值这么高，我有什么办法！” 我们在自己或是在看主播玩游戏的时候，经常会听到这样的抱怨—网络太差，影响游戏体验。 不知道大家发现没有，这种抱怨一般都是玩家在玩RTS&amp;#x2F;MOBA（王者荣耀、英雄联盟、DOT"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg"><meta property="article:author" content="恒逸"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg"><meta name="description" content="大白话说懂“帧同步”，以王者荣耀为例“网络很卡，英雄动不了。” “我按技能了啊！可ping值这么高，我有什么办法！” 我们在自己或是在看主播玩游戏的时候，经常会听到这样的抱怨—网络太差，影响游戏体验。 不知道大家发现没有，这种抱怨一般都是玩家在玩RTS&amp;#x2F;MOBA（王者荣耀、英雄联盟、DOT"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="http://example.com/2025/10/04/%E5%B8%A7%E5%90%8C%E6%AD%A5/"><link rel="preconnect" href="//cdn.cbd.int"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: {"enable":true,"img":"https://upload-bbs.miyoushe.com/upload/2024/07/27/125766904/ba62475f396df9de3316a08ed9e65d86_5680958632268053399..png"},
+  postHeadAiDescription: {"enable":true,"gptName":"AnZhiYu","mode":"local","switchBtn":false,"btnLink":"https://afdian.net/item/886a79d4db6711eda42a52540025c377","randomNum":3,"basicWordCount":1000,"key":"xxxx","Referer":"https://xx.xx/"},
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: undefined,
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "nav_music",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: 恒逸","link":"链接: ","source":"来源: 恒逸的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: '恒逸的博客',
+  title: '帧同步',
+  postAI: '',
+  pageFillDescription: '大白话说懂帧同步以王者荣耀为例网络很卡英雄动不了我按技能了啊可值这么高我有什么办法我们在自己或是在看主播玩游戏的时候经常会听到这样的抱怨网络太差影响游戏体验不知道大家发现没有这种抱怨一般都是玩家在玩王者荣耀英雄联盟魔兽争霸星际争霸游戏时发出的而在玩其他同样也需要联网的游戏比如卡牌炉石传说魔兽世界时大家很少抱怨网络卡这是什么原因呢首先我们先来看看一下什么叫卡中文卡从字面意思了解差不多是停住顿住不动的意思具体来说是画面或者人物不动了而网络卡的英文是意思则是延迟综合两者我们基本可以认为卡停住延迟其实所有网络游戏都会卡因为网络归根结底是通过电介质连接的目前最快速度的传输介质是光纤传播速度约假设中国和美国玩家联网玩游戏物理距离理论上至少也会有秒的延迟电脑和电脑手机和手机之间不是直接通过光纤连接的而要通过路由器基站等连在一起中间任何一个环节出了问题都会导致卡网络带宽是有限的你的王者荣耀要跟其他人的英雄联盟争抢带宽争不过的时候就会卡如何规避上面的问题尽量做到不卡最好的方法是在一个小空间里组件局域网游戏比如网吧比如电竞现场这也是为什么比赛为了做到公平几乎都要在线下举办的原因而像卡牌游戏和其实也会卡只不过玩家感受不明显而已一个具体的例子在玩魔兽世界时有时会看到人物瞬移会看到技能明明刚释放就打到了人身上就是卡导致的既然所有联网游戏理论上都会卡那么游戏开发人员要做的是尽量让人感觉不到卡举一个实际的例子现在英雄在释放技能的时候都会有前摇和后摇其实这个设定最初是游戏开发人员为了让玩家在视觉上感觉不那么卡所做的技巧假如前摇后摇秒那么这个技能在秒时放出或是秒时放出虽然两者有秒的延迟但是对于玩家来说视觉上都能接受所有的技巧都是为了能够更好的同步玩家操作什么叫同步呢同步即在一场战斗中开发人员采用一定的技术和技巧让每个玩家感觉战斗流畅模式一状态同步还是以王者荣耀为例如果王者荣耀采用的是状态同步实际并非如此那么客户端玩家手机和服务器游戏公司的数据是这样交互的若玩家的英雄在地点点地点此时英雄并不会立即走到地点而是会走这样的流程客户端发送一条消息到服务器包含英雄速度行走方向服务器收到消息不断计算英雄的位置例如每秒计算一次结果取决于服务器性能和物理引擎然后实时广播给每个客户端发送给玩家玩家玩家客户端收到服务器发来的英雄位置信息这才刷新英雄的位置可以看到状态同步的核心原则是服务器作为计算大脑战斗的计算规则布局在服务器上每个客户端都只是告诉服务器要做什么由服务器决定怎么做再回告客户端客户端才能做表现而如果王者荣耀采用的是状态同步会有三个问题难以解决一是流量问题想想看玩家只是点了一下地板为了保证英雄每时每刻都在正确的位置上在英雄停下来之前客户端会收到大量的位置信息如果这个英雄可以发射霰弹假设子弹有颗服务器就要每时每刻计算并同步个子弹的位置服务器压力和流量可想而知二是卡顿问题因为网络延迟总是存在如果采用状态同步英雄会出现只要一卡就静止不同的情况比如玩家的网络不好时他会看到所有的英雄和小兵都像幻灯片一样卡着移动经常出现显得十分不流畅三是操作合并的问题例如玩家在秒时用了闪烁到了玩家身边在秒时用了技能把玩家杀死在秒时又闪烁回原地如果网络良好的情况下玩家看到的是玩家先闪到自己身边再杀死自己再回到原地而如果玩家的突然网络不好延迟大于秒就会看到玩家在原地杀死了自己这是因为延迟导致客户端在同一时刻收到个位置客户端并不知道之前的位置是在什么时候被改变的就像一个菜谱如果只有烹饪顺序没有火候时间你无法还原出这道菜这也是在一些游戏上会看到英雄小兵莫名死掉或者瞬移据说腾讯的全名超神因为采用状态同步存在此问题那为什么魔兽世界这样的游戏要用状态同步呢一是因为地图和人数的地图一般非常大一个地图上的人数可能非常多需要能计算一张地图上所有人的行为而对于客户端来说既不能要求每个客户端都能计算所有的行为也不会把一张地图上的行为同步给客户端一般的做法是管理和同步把大地图分成很多个小区域如区域服务器只同步小区域内的玩家行为玩家在区域服务器只告诉他区域中的人和的行为二是状态同步难以作弊因为所有的数据都在服务器上如果服务器不同步数据所有客户端并不知道其他玩家的位置和状态而由于魔兽争霸王者荣耀用的不是状态同步所有玩家的位置和状态在客户端都有保存所以外挂只需要把黑色迷雾隐藏便可以全图透视总结状态同步战斗计算写在服务器上服务器告诉客户端如何表现怎么移动是否回血死亡放技能都由服务器决定缺点耗费流量服务器计算压力大网络差时会出现莫名移动及死亡优点难以作弊超大地图依赖服务器计算必须使用状态同步模式二帧同步我们看看帧同步是如何解决状态同步的三大难题的一流量问题帧同步所有的计算都放在客户端服务器只是转发操作例如玩家点了移动服务器并不需要每时每刻同步英雄的位置只需要告诉每个客户端玩家移动的速度和范围由客户端自行计算移动轨迹二卡顿问题帧同步在网络抖动时也会卡顿不过可以用指令和来掩盖让玩家感觉流畅三操作合并的问题帧同步同步的是指令而不是状态并给每个指令加上了时序帧序号不管延迟多大指令都是有顺序的关于第三点举一个生活中的例子便于理解状态同步就像天气预报帮你算好天气的变化每小时告诉你是出太阳还是下雨比如时太阳时也是太阳可是如果开始下雨停雨了你就没办法了帧同步像气象站直接告诉你有大风有暖湿气流你自己计算整个天气的变化帧同步的核心原则是客户端是计算大脑服务器只作为转发点战斗的计算规则布局在每个客户端上帧同步实现方案也被称为锁步即服务端定好一个时间间隔例如秒每秒帧每个客户端收集操作指令按照这个间隔上传指令如第一帧客户端在第秒时上传操作服务器收集所有客户端的第一帧指令后在第秒时广播给所有客户端所有客户端收到指令集合第一帧放入逻辑引擎中如引擎根据引擎计算结果展现效果客户端把第二帧秒秒或秒秒的操作上传服务器以此类推关于第点如果是收集的是秒秒的操作则在秒秒这段时间的操作都必须隐匿个人感觉可以采用秒秒以上是在网络状况良好的情况下即网络抖动不明显如果网络抖动太大比如玩家的延突然从秒变成秒由于服务器必须要收集所有客户端的操作则其他所有玩家都要等待秒后才能收到指令客户端的表现为本来大家一点都不卡有一个玩家延迟了秒所有玩家的画面都会卡秒接着所有玩家的操作都变为延迟秒只要有一个玩家掉线了所有玩家都会一直卡住直到这个玩家重新连上线魔兽争霸便是这样的但是不管怎么卡该有的操作还是会有还是以玩家在秒时用了闪烁到了玩家身边在秒时用了技能把玩家杀死在秒时又闪烁回原地这个为例当玩家的延迟变为秒时在帧同步下客户端表现为所有玩家都看到玩家在秒时用了闪烁到了玩家身边在秒时用了技能把玩家杀死在秒时又闪烁回原地一人卡而卡全部人的方式显然不符合人性玩家希望看到的是你卡就卡你自己好了不要连累其他人于是就有了乐观帧锁定的概念具体流程是这样的服务端还是定好一个时间间隔例如秒每秒帧每个客户端收集操作指令还是按照这个间隔上传指令如第一帧客户端在第秒时上传操作服务器不再等收集所有客户端指令只要到了该帧结束的时候第一帧为第秒直接广播指令这样就会出现一个情况如果客户端延迟很大他的第一帧指令会在第帧时被服务器接收到这时服务器可以按照第帧的指令才处理也就是说玩家在秒时放大招如果他的延迟时秒则服务器告诉大家玩家是在秒时放大招每个客户端再去判断这时是否能放大招如在秒时时英雄死了则指令无效解决了其他玩家卡的问题有没有办法把这个延迟高的玩家卡的问题也解决呢有的只要让他感觉不到卡即可方法一缓存指令让这名玩家所有的指令都延迟秒执行这样做玩家会感觉一直延迟秒但不会卡即不会一下又延迟一下无延迟方法二客户端先行插值例如玩家延迟秒则他点下地板的同时立即让他比原来慢得多的速度开始转身并开始走动因为这时还没有收到服务器回包所有的行动都是预测行动等秒后收到指令如果跟预测的操作一直则加速按照原路径前进如果预测错了比如在中间被其他英雄冻住了由于开始走的速度很慢离正在的位置偏移很小玩家不太能感觉到这里的关键是所有的预测行动都只是客户端表现而已并不能在逻辑上触发机制比如玩家走到了泉水旁并不能真正回血只有等收到服务器回包预测正确后才能回血因此把逻辑层和表现层分离很关键',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-04 04:58:33',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://npm.elemecdn.com/anzhiyu-blog-static@1.0.4/img/avatar.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">恒逸的博客</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" target="_blank"><img class="post-qr-code-img" alt="微信" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/%E4%B8%AD%E7%BA%A7/" style="font-size: 1.05rem;">中级<sup>7</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/09/"><span class="card-archive-list-date">九月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="article-meta tags"><a class="article-meta__tags" href="/tags/%E4%B8%AD%E7%BA%A7/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>中级</span></a></span></div></div><h1 class="post-title" itemprop="name headline">帧同步</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-10-03T20:56:58.000Z" title="发表于 2025-10-04 04:56:58">2025-10-04</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-10-03T20:58:33.727Z" title="更新于 2025-10-04 04:58:33">2025-10-04</time></span></div><div class="meta-secondline"><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为长沙"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>长沙</span></div></div></div><article class="post-content" id="article-container" itemscope itemtype="http://example.com/2025/10/04/%E5%B8%A7%E5%90%8C%E6%AD%A5/"><header><a href="/tags/%E4%B8%AD%E7%BA%A7/" tabindex="-1" itemprop="url">中级</a><h1 id="CrawlerTitle" itemprop="name headline">帧同步</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">恒逸</span><time itemprop="dateCreated datePublished" datetime="2025-10-03T20:56:58.000Z" title="发表于 2025-10-04 04:56:58">2025-10-04</time><time itemprop="dateCreated datePublished" datetime="2025-10-03T20:58:33.727Z" title="更新于 2025-10-04 04:58:33">2025-10-04</time></header><h1 id="大白话说懂“帧同步”，以王者荣耀为例"><a href="#大白话说懂“帧同步”，以王者荣耀为例" class="headerlink" title="大白话说懂“帧同步”，以王者荣耀为例"></a><a target="_blank" rel="noopener" href="https://www.cnblogs.com/alphaGo/p/15747455.html">大白话说懂“帧同步”，以王者荣耀为例</a></h1><p>“网络很卡，英雄动不了。”</p>
+<p>“我按技能了啊！可ping值这么高，我有什么办法！”</p>
+<p>我们在自己或是在看主播玩游戏的时候，经常会听到这样的抱怨—网络太差，影响游戏体验。</p>
+<p>不知道大家发现没有，这种抱怨一般都是玩家在玩RTS&#x2F;MOBA（王者荣耀、英雄联盟、DOTA、魔兽争霸、星际争霸）游戏时发出的，而在玩其他同样也需要联网的游戏，比如卡牌（炉石传说）、MMORPG（魔兽世界）时，大家很少抱怨网络卡。这是什么原因呢？</p>
+<p>首先，我们先来看看一下什么叫“卡”。中文“卡”，从字面意思了解，差不多是“停住&#x2F;顿住&#x2F;不动”的意思，具体来说，是画面或者人物不动了。而网络“卡”的英文，是lag，意思则是“延迟”。综合两者，我们基本可以认为，卡 &#x3D; 停住 + 延迟。</p>
+<p>其实所有网络游戏，都会“卡”，因为：</p>
+<p>1.网络归根结底是通过“电介质”连接的，目前最快速度的传输介质是光纤（传播速度约300000000m&#x2F;s），假设中国和美国玩家联网玩游戏（物理距离7000000m），理论上至少也会有0.023秒的延迟；</p>
+<p>2.电脑和电脑、手机和手机之间不是直接通过光纤连接的，而要通过路由器、基站…等连在一起，中间任何一个环节出了问题，都会导致“卡”；</p>
+<p>3.网络带宽是有限的，你的王者荣耀要跟其他人的英雄联盟争抢带宽，争不过的时候就会“卡”。</p>
+<p>4.如何规避上面的问题，尽量做到“不卡”？最好的方法是在一个小空间里组件局域网游戏，比如网吧，比如电竞现场，这也是为什么比赛为了做到公平几乎都要在线下举办的原因。</p>
+<p>而像卡牌游戏和MMORPG，其实也会卡，只不过玩家感受不明显而已。一个具体的例子，在玩魔兽世界时，有时会看到人物“瞬移”，会看到技能明明刚释放就打到了人身上，就是“卡”导致的。</p>
+<p>既然所有联网游戏理论上都会“卡”，那么游戏开发人员要做的是，尽量让人<strong>感觉</strong>不到“卡”。举一个实际的例子，现在英雄在释放技能的时候都会有“前摇”和“后摇”，其实这个设定最初是游戏开发人员为了让玩家在视觉上感觉不那么卡所做的技巧。假如“前摇”+“后摇”0.2秒，那么这个技能在0.05秒时放出，或是0.15秒时放出，虽然两者有0.1秒的延迟，但是对于玩家来说视觉上都能接受。</p>
+<p>所有的技巧，都是为了能够更好的“同步”玩家操作。什么叫“同步”呢？同步，即在一场战斗中，开发人员采用一定的技术和技巧，让每个玩家感觉战斗流畅。</p>
+<hr>
+<p> 模式一：状态同步</p>
+<p>还是以王者荣耀为例，如果王者荣耀采用的是“状态同步”（实际并非如此），那么客户端（玩家手机）和服务器（游戏公司）的数据是这样交互的：</p>
+<p>若玩家1的英雄在地点A，点地点B，此时英雄并不会立即走到地点B，而是会走这样的流程：</p>
+<p>1.客户端发送一条消息到服务器，包含英雄速度、行走方向；</p>
+<p>2.服务器收到消息，不断计算英雄的位置（例如每0.01秒计算一次结果，取决于服务器性能和<strong>物理引擎</strong>），然后实时广播给每个客户端（发送给玩家1、玩家2….玩家10）；</p>
+<p>3.客户端收到服务器发来的英雄位置信息，这才刷新英雄的位置。</p>
+<p>可以看到，状态同步的核心原则是<strong>服务器作为计算大脑</strong>，战斗的计算规则布局在服务器上，每个客户端都只是“告诉”服务器要做什么，由服务器决定怎么做，再“回告”客户端，客户端才能做表现。</p>
+<p>而如果王者荣耀采用的是状态同步，会有三个问题难以解决。</p>
+<p>一是流量问题。想想看，玩家只是点了一下地板，为了保证英雄每时每刻都在正确的位置上，在英雄停下来之前，客户端会收到大量的位置信息。如果这个英雄可以发射“霰弹”，假设子弹有50颗，服务器就要每时每刻计算并同步50个子弹的位置，服务器压力和流量可想而知。</p>
+<p>二是卡顿问题。因为网络延迟总是存在，如果采用状态同步，英雄会出现只要一卡就静止不同的情况。比如玩家1的网络不好时，他会看到所有的英雄和小兵都像幻灯片一样卡着移动（dota1经常出现），显得十分“不流畅”。</p>
+<p>三是操作合并的问题。例如，玩家A在0.1秒时用了“闪烁”到了玩家B身边，在0.3秒时用了技能把玩家B杀死，在0.5秒时又闪烁回原地。如果网络良好的情况下，玩家B看到的是，玩家A先闪到自己身边，再杀死自己，再回到原地；而如果玩家B的突然网络不好，延迟大于0.5秒，就会看到玩家A在原地杀死了自己，这是因为延迟导致客户端在同一时刻收到2个位置，客户端并不知道之前的位置是在什么时候被改变的（就像一个菜谱如果只有烹饪顺序没有火候时间，你无法还原出这道菜）。这也是在一些游戏上会看到英雄小兵莫名死掉，或者瞬移（据说腾讯的《全名超神》因为采用状态同步，存在此问题）。</p>
+<p>那为什么魔兽世界这样的MMORPG游戏要用状态同步呢？</p>
+<p>一是因为地图和人数。MMORPG的地图一般非常大，一个地图上的人数可能非常多，需要能计算一张地图上所有人的行为。而对于客户端来说，既不能要求每个客户端都能计算所有的行为，也不会把一张地图上的行为同步给客户端。一般的做法是AOI（Area of Interest）管理和同步，把大地图分成很多个小区域（如ABCDE区域），服务器只同步小区域内的玩家行为（玩家在A区域，服务器只告诉他A区域中的人和NPC的行为）。</p>
+<p>二是状态同步难以作弊。因为所有的数据都在服务器上，如果服务器不同步数据，所有客户端并不知道其他玩家的位置和状态。而由于魔兽争霸、王者荣耀用的不是状态同步，所有玩家的位置和状态在客户端都有保存，所以外挂只需要把黑色迷雾隐藏，便可以全图透视。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://img2020.cnblogs.com/blog/912059/202201/912059-20220102144206426-1763606904.png" alt="img"></p>
+<p>总结：状态同步，战斗计算写在服务器上，服务器告诉客户端如何表现，怎么移动、是否回血&#x2F;死亡&#x2F;放技能都由服务器决定。缺点：耗费流量、服务器计算压力大、网络差时会出现“莫名移动及死亡”。优点：难以作弊，超大地图依赖服务器计算必须使用状态同步。</p>
+<hr>
+<p>模式二：帧同步</p>
+<p>我们看看帧同步是如何解决状态同步的三大难题的。</p>
+<p>一流量问题。帧同步所有的计算都放在客户端，服务器只是转发操作。例如玩家A点了移动，服务器并不需要每时每刻同步英雄的位置，只需要告诉每个客户端，玩家A移动的速度和范围，由客户端自行计算移动轨迹；</p>
+<p>二卡顿问题。帧同步在网络抖动时也会卡顿，不过可以用<strong>指令buffer</strong>和<strong>time warp</strong>来“掩盖”，让玩家感觉流畅；</p>
+<p>三操作合并的问题。帧同步同步的是指令而不是状态，并给每个指令加上了<strong>时序（帧序号）</strong>，不管延迟多大，指令都是有顺序的。</p>
+<p>关于第三点，举一个生活中的例子便于理解。</p>
+<p>状态同步就像天气预报，帮你算好天气的变化，每小时告诉你是出太阳还是下雨，比如12时太阳，1时也是太阳，可是如果12:20开始下雨，12:40停雨了，你就没办法了；</p>
+<p>帧同步像气象站，直接告诉你12:10有大风、12:15有暖湿气流，你自己计算整个天气的变化。</p>
+<p>帧同步的核心原则是<strong>客户端是计算大脑，*<em>服务器只作为转发点*</em></strong>，战斗的计算规则布局在每个客户端上。</p>
+<p>帧同步实现方案也被称为“锁步”，即：<br>1.服务端定好一个时间间隔（例如0.1秒，每秒10帧）；</p>
+<p>2.每个客户端收集操作指令，按照这个间隔上传指令，如第一帧，客户端在第0.05秒时上传操作；</p>
+<p>3.服务器收集所有客户端的第一帧指令后，在第0.1秒时广播给所有客户端；</p>
+<p>4.所有客户端收到指令集合（第一帧），放入逻辑引擎中（如box2d引擎），根据引擎计算结果展现效果；</p>
+<p>5.客户端把第二帧（0.10秒-0.15秒，或0.06秒-0.15秒）的操作上传服务器，以此类推。</p>
+<p>关于第4点，如果是收集的是0.10秒-0.15秒的操作，则在0.06秒-0.10秒这段时间的操作都必须隐匿，个人感觉可以采用0.06秒-0.15秒。</p>
+<p>以上是在网络状况良好的情况下，即网络抖动不明显。如果网络抖动太大，比如玩家A的延突然从0.01秒变成0.5秒，由于服务器必须要收集所有客户端的操作，则其他所有玩家都要等待0.5秒后才能收到指令。客户端的表现为：本来大家一点都不卡，有一个玩家延迟了0.5秒，所有玩家的画面都会卡0.5秒，接着所有玩家的操作都变为延迟0.5秒；只要有一个玩家掉线了，所有玩家都会一直卡住，直到这个玩家重新连上线（魔兽争霸3便是这样的）。</p>
+<p>但是不管怎么卡，该有的操作还是会有，还是以“玩家A在0.1秒时用了“闪烁”到了玩家B身边，在0.3秒时用了技能把玩家B杀死，在0.5秒时又闪烁回原地。”这个为例，当玩家B的延迟变为0.5秒时，在帧同步下，客户端表现为：所有玩家都看到“玩家A在0.1秒时用了“闪烁”到了玩家B身边，在0.8（0.3+0.5）秒时用了技能把玩家B杀死，在1.0（0.5+0.5）秒时又闪烁回原地。”</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://img2020.cnblogs.com/blog/912059/202201/912059-20220102150532176-2072066343.png" alt="img"></p>
+<p>一人卡而卡全部人的方式显然不符合人性，玩家希望看到的是，你卡就卡你自己好了，不要连累其他人。于是，就有了“乐观帧锁定”的概念。</p>
+<p>具体流程是这样的：</p>
+<p>1.服务端还是定好一个时间间隔（例如0.1秒，每秒10帧）；</p>
+<p>2.每个客户端收集操作指令，还是按照这个间隔上传指令，如第一帧，客户端在第0.05秒时上传操作；</p>
+<p>3.服务器不再等收集所有客户端指令，只要到了该帧结束的时候（第一帧为第0.1秒），直接广播指令。</p>
+<p>这样就会出现一个情况，如果客户端A延迟很大，他的第一帧指令会在第1+N帧时被服务器接收到，这时服务器可以按照第1+N帧的指令才处理。</p>
+<p>也就是说，玩家A在0.09秒时放大招，如果他的延迟时0.5秒，则服务器告诉大家，玩家A是在0.59秒时放大招，每个客户端再去判断这时是否能放大招（如在0.2秒时时英雄死了，则指令无效）。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://img2020.cnblogs.com/blog/912059/202201/912059-20220102155117709-364882712.png" alt="img"></p>
+<p> 解决了其他玩家卡的问题，有没有办法把这个延迟高的玩家卡的问题也解决呢？有的。只要让他“感觉”不到卡即可。</p>
+<p>方法一：缓存指令（buffer），让这名玩家所有的指令都延迟0.5秒执行。这样做玩家A会感觉一直延迟0.5秒，但不会卡（即不会一下又延迟一下无延迟）；</p>
+<p>方法二：客户端先行（time warp）+插值。例如玩家A延迟0.5秒，则他点下地板的同时，立即让他（比原来慢得多的速度）开始转身并开始走动，因为这时还没有收到服务器回包，所有的行动都是“预测”行动。等0.5秒后收到指令，如果跟预测的操作一直，则加速按照原路径前进；如果预测错了，比如在中间被其他英雄冻住了，由于开始走的速度很慢，离正在的位置偏移很小，玩家不太能感觉到。这里的关键是，所有的“预测”行动，都只是客户端表现而已，并不能在逻辑上触发机制。比如玩家A走到了泉水旁，并不能真正回血，只有等收到服务器回包，“预测”正确后才能回血。因此把<strong>逻辑层</strong>和<strong>表现层</strong>分离很关键。</p>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">恒逸</div><div class="post-copyright__author_desc">慢慢来比较快</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="http://example.com/2025/10/04/%E5%B8%A7%E5%90%8C%E6%AD%A5/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('http://example.com/2025/10/04/%E5%B8%A7%E5%90%8C%E6%AD%A5/')">帧同步</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="http://example.com/2025/10/04/%E5%B8%A7%E5%90%8C%E6%AD%A5/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=undefined&amp;url=http://example.com/2025/10/04/%E5%B8%A7%E5%90%8C%E6%AD%A5/&amp;pic=undefined" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">恒逸的博客</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/%E4%B8%AD%E7%BA%A7/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>中级<span class="tagsPageCount">7</span></a></div></div></div><div class="post_share"><div class="social-share" data-image="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">游戏场景管理--空间划分</div></div></a></div><div class="next-post pull-right"><a href="/2025/10/04/%E7%BA%A2%E7%82%B9%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F%E4%BB%A5%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">红点系统的前世今生以及相关注意事项</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="anzhiyufont anzhiyu-icon-thumbs-up fa-fw" style="font-size: 1.5rem; margin-right: 4px"></i><span>喜欢这篇文章的人也看了</span></div><div class="relatedPosts-list"><div><a href="/2025/09/20/%E7%BA%A2%E7%82%B9%E7%B3%BB%E7%BB%9F/" title="红点系统"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-09-20</div><div class="title">红点系统</div></div></a></div><div><a href="/2025/09/22/%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="事件系统"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-09-22</div><div class="title">事件系统</div></div></a></div><div><a href="/2025/09/23/%E6%96%B0%E6%89%8B%E5%BC%95%E5%AF%BC/" title="新手引导"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-09-23</div><div class="title">新手引导</div></div></a></div><div><a href="/2025/10/04/SLG%E5%A4%A7%E5%9C%B0%E5%9B%BE%E7%9A%84%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88/" title="SLG大地图的管理方案"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-10-04</div><div class="title">SLG大地图的管理方案</div></div></a></div><div><a href="/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/" title="游戏场景管理--空间划分"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-10-04</div><div class="title">游戏场景管理--空间划分</div></div></a></div><div><a href="/2025/10/04/%E7%BA%A2%E7%82%B9%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F%E4%BB%A5%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" title="红点系统的前世今生以及相关注意事项"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-10-04</div><div class="title">红点系统的前世今生以及相关注意事项</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description"></div></div></div><div class="card-widget anzhiyu-right-widget" id="card-wechat" onclick="null"><div id="flip-wrapper"><div id="flip-content"><div class="face" style="background: url(https://bu.dusays.com/2023/01/13/63c02edf44033.png) center center / 100% no-repeat"></div><div class="back face" style="background: url(https://bu.dusays.com/2023/05/13/645fa415e8694.png) center center / 100% no-repeat"></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%99%BD%E8%AF%9D%E8%AF%B4%E6%87%82%E2%80%9C%E5%B8%A7%E5%90%8C%E6%AD%A5%E2%80%9D%EF%BC%8C%E4%BB%A5%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80%E4%B8%BA%E4%BE%8B"><span class="toc-number">1.</span> <span class="toc-text">大白话说懂“帧同步”，以王者荣耀为例</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/04/%E7%BA%A2%E7%82%B9%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F%E4%BB%A5%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" title="红点系统的前世今生以及相关注意事项">红点系统的前世今生以及相关注意事项</a><time datetime="2025-10-03T20:59:12.000Z" title="发表于 2025-10-04 04:59:12">2025-10-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/04/%E5%B8%A7%E5%90%8C%E6%AD%A5/" title="帧同步">帧同步</a><time datetime="2025-10-03T20:56:58.000Z" title="发表于 2025-10-04 04:56:58">2025-10-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/" title="游戏场景管理--空间划分">游戏场景管理--空间划分</a><time datetime="2025-10-03T19:49:48.000Z" title="发表于 2025-10-04 03:49:48">2025-10-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/04/SLG%E5%A4%A7%E5%9C%B0%E5%9B%BE%E7%9A%84%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88/" title="SLG大地图的管理方案">SLG大地图的管理方案</a><time datetime="2025-10-03T17:48:58.000Z" title="发表于 2025-10-04 01:48:58">2025-10-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/23/%E6%96%B0%E6%89%8B%E5%BC%95%E5%AF%BC/" title="新手引导">新手引导</a><time datetime="2025-09-23T15:52:17.000Z" title="发表于 2025-09-23 23:52:17">2025-09-23</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2025 By <a class="footer-bar-link" href="/" title="恒逸" target="_blank">恒逸</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">0</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://image.anheyu.com/" title="安知鱼图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="安知鱼图床"/><span class="back-menu-item-text">安知鱼图床</span></a></div></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/%E4%B8%AD%E7%BA%A7/" style="font-size: 0.88rem;">中级<sup>7</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="14311864028" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random" volume="0.7"></meting-js></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://music.163.com/#/playlist?id=14311864028&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("09/20/2025 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2025 By 安知鱼 V1.6.14",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 恒逸 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
