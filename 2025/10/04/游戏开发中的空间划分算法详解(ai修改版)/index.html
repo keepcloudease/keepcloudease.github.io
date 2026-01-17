@@ -1,0 +1,537 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>游戏开发中的空间划分算法详解 | 恒逸的博客</title><meta name="keywords" content="中级"><meta name="author" content="恒逸"><meta name="copyright" content="恒逸"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="游戏开发中的空间划分算法详解"><meta name="application-name" content="游戏开发中的空间划分算法详解"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="游戏开发中的空间划分算法详解"><meta property="og:url" content="http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3(ai%E4%BF%AE%E6%94%B9%E7%89%88)/index.html"><meta property="og:site_name" content="恒逸的博客"><meta property="og:description" content="一、 前言在游戏开发中，空间划分算法（Spatial Partitioning）是核心技术之一。我们需要从理论上理解这些算法，并在实际项目中灵活运用。 核心应用场景：  碰撞检测 (Collision Detection) 视锥体剔除 (Frustum Culling) 邻近查询 (Proximit"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg"><meta property="article:author" content="恒逸"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg"><meta name="description" content="一、 前言在游戏开发中，空间划分算法（Spatial Partitioning）是核心技术之一。我们需要从理论上理解这些算法，并在实际项目中灵活运用。 核心应用场景：  碰撞检测 (Collision Detection) 视锥体剔除 (Frustum Culling) 邻近查询 (Proximit"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3(ai%E4%BF%AE%E6%94%B9%E7%89%88)/"><link rel="preconnect" href="//cdn.cbd.int"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: {"enable":true,"img":"https://upload-bbs.miyoushe.com/upload/2024/07/27/125766904/ba62475f396df9de3316a08ed9e65d86_5680958632268053399..png"},
+  postHeadAiDescription: {"enable":true,"gptName":"AnZhiYu","mode":"local","switchBtn":false,"btnLink":"https://afdian.net/item/886a79d4db6711eda42a52540025c377","randomNum":3,"basicWordCount":1000,"key":"xxxx","Referer":"https://xx.xx/"},
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: undefined,
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "nav_music",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: 恒逸","link":"链接: ","source":"来源: 恒逸的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: '恒逸的博客',
+  title: '游戏开发中的空间划分算法详解',
+  postAI: '',
+  pageFillDescription: '一、 前言, 二、 均匀网格 (Uniform Grid), 1. 核心原理与碰撞优化, 碰撞检测算法对比, 动态对象优化策略, 六边形网格 (Hexagonal Grid), 2. 数据结构实现方案, 3. 层次网格 (Hierarchical Grid), 三、 四叉树x2F八叉树 (Quadtree x2F Octree), 1. 核心难点：边界对象 (Straddling), 2. 高性能实现：线性八叉树 (Linear Octree), 四、 k-d树 (k-dimensional Tree), 1. 定义与构建, 2. 特性与局限, 3. 渲染应用, 五、 BSP树 (Binary Space Partitioning), 1. 特点, 2. 关键技术, 六、 实战案例：大型城市开放世界 (类GTA5), 1. 需求分析 (Requirements), 2. 离线准备工作 (Offline), 3. 运行时管线 (Runtime Implementation), Step 1 静态物体渲染（双重剔除）, Step 2 动态物体管理（以玩家为中心）, Step 3 透明物体, 总结一前言在游戏开发中空间划分算法是核心技术之一我们需要从理论上理解这些算法并在实际项目中灵活运用核心应用场景碰撞检测视锥体剔除邻近查询考量维度静态对象动态对象算法是否支持空间节点的快速更新内存开销效率链表数组指针哈希二均匀网格将场景均匀划分为规则的网格核心原理与碰撞优化基本假设对象中心坐标决定所属网格对象包围盒小于单位网格尺寸九宫格测试碰撞检测仅需在对象所属网格及相邻的个网格共个中进行碰撞检测算法对比检测方式测试网格数最优最坏特点点需测试所有邻接网格最小顶点利用方向性优化减少无效测试包围盒速度最快但内存开销大且对象移动更新慢需更新多个引用动态对象优化策略重新分配更新对于大量移动的对象每一帧清空并重新分配所有对象到网格往往比逐个更新对象的位置更高效数据结构若采用重新分配策略可使用单向链表结构更简洁插入速度快六边形网格适用性当对象直径小于网格直径的时优势邻居数量少从个九宫格减少到个射线检测效率高六边形结构对射线投射更友好数据结构实现方案数组链表适合动态场景但链表导致紧凑数组适合静态场景内存连续需两次遍历构建哈希表适合稀疏大地图通过映射无限空间到有限内存位数组每一行列分配一个位图通过位运算快速求交集层次网格解决问题场景中物体大小差异巨大原理建立多层不同尺寸的网格大物体放入上层小物体放入下层局限不适合视锥体剔除物体可能跨越边界需被所有网格包含或被错误提升层级主要用于碰撞检测三四叉树八叉树核心难点边界对象当物体位于网格分割线上时传统做法是将其提升至父节点导致小物体可能停留在根节点造成视锥体剔除失效解决方案松散四八叉树原理适当扩大网格的包围盒尺寸例如扩大到倍效果边界处的物体能被完全包裹在扩大的子节点中从而下沉到更深的层级提高剔除精度高性能实现线性八叉树传统指针树内存开销大且不连续现代做法使用将多维坐标交叉位运算映射为一维整数保证了空间局部性存储使用哈希表存储节点访问速度从提升至位运算索引推导父求子子求父注代表个维度即每次位移位四树定义与构建树是二分查找树在维空间的泛化也是树的一种特例轴对齐分割构建策略选轴计算各维度数据的方差选择方差最大分布最散的维度进行分割选点选择中值保证树的平衡性特性与局限多维范围查询擅长处理如年龄且身高的多条件查询数据完整性要求必须具备所有维度的数据不能缺失某个属性否则无法索引维度诅咒节点数量必须远大于否则效率不如暴力遍历邻近查询对比均匀网格直接定位树结论游戏中的动态邻近查询更推荐使用均匀网格渲染应用遮挡剔除透明渲染树作为的一种可以严格确定从前向后用于遮挡剔除或从后向前用于透明物体的遍历顺序五树特点任意分割面分割面可以是任意方向和位置不一定垂直于轴室内场景神器极其适合多房间多墙壁的室内场景画家算法早期昂贵时的多边形排序方案关键技术背面剔除区别于绕序裁剪图形的绕序裁剪只考虑眼睛位置背面剔除需结合视点位置视线朝向及视锥体机制如果视点在分割面的一侧且视线背离分割面即平面在视点背后则另一侧的所有子节点都不可见可直接剔除构建方式手动指定在关卡编辑器中将房间的墙设定为分割面低效但可控自动分割算法复杂需反复试探寻找最优解必须离线预处理凹多面体判断标记复杂凹面体的内外区域点从根节点开始遍历直至叶子节点即可判断是否在内部六实战案例大型城市开放世界类单一算法无法满足复杂场景巨型静态城市海量动态交通需采用混合架构以下是基于需求的深度分析与实现管线需求分析静态场景极其庞大高楼林立如包含大量不透明建筑动态对象数量庞大车流位置频繁变化核心痛点必须使用遮挡剔除以处理高楼遮挡需要从前向后的渲染顺序需要快速剔除看不见的物体离线准备工作分配与合并为静态物体分配将距离近的小物体合并到一个大的包围盒中减少节点数量树构建为所有静态不透明物体生成一棵树利用其天然的排序优势八叉树构建将整个静态场景进行空间划分用于粗粒度的空间管理运行时管线静态物体渲染双重剔除八叉树粗剔除使用八叉树进行视锥体剔除将所有被剔除的物体进行标记树遍历与遮挡剔除按照从前向后的顺序遍历树背面子树剔除判断节点是否在视线的背面且被遮挡平面挡住如果是直接剔除整棵子树视锥体状态检查遍历节点中的包围盒时检查该物体是否已被八叉树标记为剔除如果是直接跳过遮挡查询若物体通过了上述测试进行遮挡查询使用或软件光栅化渲染队列通过所有测试的物体加入渲染队列动态物体管理以玩家为中心均匀网格管理以主角为中心使用均匀网格在其周围生成管理动态对象车人生命周期离开一定范围如宫格或更大范围后销毁或回收对象使用对象缓存技术防止频繁遮挡优化角色定位动态物体视为小物件不作为遮挡体遮挡关系之前的静态物体高楼已作为遮挡体渲染到中无需排序动态物体无需进行复杂的空间排序只需进行视锥体剔除然后进行深度测试被静态物体遮挡则不渲染透明物体将透明物体加入单独的渲染队列在不透明物体之后渲染保证混合正确总结对象类型数据结构核心策略静态不透明八叉树树八叉树做视锥剔除树提供从前向后顺序做遮挡剔除动态对象均匀网格玩家周边生成静态物体作为遮挡体无需自身排序透明物体渲染队列最后渲染',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-01-18 05:06:41',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://npm.elemecdn.com/anzhiyu-blog-static@1.0.4/img/avatar.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">恒逸的博客</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" target="_blank"><img class="post-qr-code-img" alt="微信" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/SLG/" style="font-size: 1.05rem;">SLG<sup>1</sup></a><a href="/tags/%E4%B8%AD%E7%BA%A7/" style="font-size: 1.05rem;">中级<sup>12</sup></a><a href="/tags/%E5%A4%A7%E5%9C%B0%E5%9B%BE/" style="font-size: 1.05rem;">大地图<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/01/"><span class="card-archive-list-date">一月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">6</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/09/"><span class="card-archive-list-date">九月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">5</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="article-meta tags"><a class="article-meta__tags" href="/tags/%E4%B8%AD%E7%BA%A7/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>中级</span></a></span></div></div><h1 class="post-title" itemprop="name headline">游戏开发中的空间划分算法详解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-10-03T19:49:48.000Z" title="发表于 2025-10-04 03:49:48">2025-10-04</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2026-01-17T21:06:41.997Z" title="更新于 2026-01-18 05:06:41">2026-01-18</time></span></div><div class="meta-secondline"><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为长沙"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>长沙</span></div></div></div><article class="post-content" id="article-container" itemscope itemtype="http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3(ai%E4%BF%AE%E6%94%B9%E7%89%88)/"><header><a href="/tags/%E4%B8%AD%E7%BA%A7/" tabindex="-1" itemprop="url">中级</a><h1 id="CrawlerTitle" itemprop="name headline">游戏开发中的空间划分算法详解</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">恒逸</span><time itemprop="dateCreated datePublished" datetime="2025-10-03T19:49:48.000Z" title="发表于 2025-10-04 03:49:48">2025-10-04</time><time itemprop="dateCreated datePublished" datetime="2026-01-17T21:06:41.997Z" title="更新于 2026-01-18 05:06:41">2026-01-18</time></header><h2 id="一、-前言"><a href="#一、-前言" class="headerlink" title="一、 前言"></a>一、 前言</h2><p>在游戏开发中，空间划分算法（Spatial Partitioning）是核心技术之一。我们需要从理论上理解这些算法，并在实际项目中灵活运用。</p>
+<p><strong>核心应用场景：</strong></p>
+<ol>
+<li><strong>碰撞检测 (Collision Detection)</strong></li>
+<li><strong>视锥体剔除 (Frustum Culling)</strong></li>
+<li><strong>邻近查询 (Proximity Query)</strong></li>
+</ol>
+<p><strong>考量维度：</strong></p>
+<ul>
+<li><strong>静态对象 vs 动态对象：</strong> 算法是否支持空间节点的快速更新？</li>
+<li><strong>内存开销 vs CPU效率：</strong> 链表 vs 数组，指针 vs 哈希。</li>
+</ul>
+<h2 id="二、-均匀网格-Uniform-Grid"><a href="#二、-均匀网格-Uniform-Grid" class="headerlink" title="二、 均匀网格 (Uniform Grid)"></a>二、 均匀网格 (Uniform Grid)</h2><p>将场景均匀划分为规则的网格。</p>
+<h3 id="1-核心原理与碰撞优化"><a href="#1-核心原理与碰撞优化" class="headerlink" title="1. 核心原理与碰撞优化"></a>1. 核心原理与碰撞优化</h3><ul>
+<li><strong>基本假设：</strong> 对象中心坐标决定所属网格；对象包围盒小于单位网格尺寸。</li>
+<li><strong>九宫格测试：</strong> 碰撞检测仅需在对象所属网格及相邻的8个网格（共9个）中进行。</li>
+</ul>
+<h4 id="碰撞检测算法对比"><a href="#碰撞检测算法对比" class="headerlink" title="碰撞检测算法对比"></a>碰撞检测算法对比</h4><table>
+<thead>
+<tr>
+<th>检测方式</th>
+<th>测试网格数 (最优&#x2F;最坏)</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>点 (Point)</strong></td>
+<td>9 &#x2F; 9</td>
+<td>需测试所有邻接网格。</td>
+</tr>
+<tr>
+<td><strong>AABB最小顶点</strong></td>
+<td>4 &#x2F; 9</td>
+<td>利用方向性优化，减少无效测试。</td>
+</tr>
+<tr>
+<td><strong>AABB包围盒</strong></td>
+<td>1 &#x2F; 4</td>
+<td><strong>速度最快</strong>，但内存开销大，且对象移动更新慢（需更新多个引用）。</td>
+</tr>
+</tbody></table>
+<h4 id="动态对象优化策略"><a href="#动态对象优化策略" class="headerlink" title="动态对象优化策略"></a>动态对象优化策略</h4><ul>
+<li><strong>重新分配 &gt; 更新：</strong> 对于大量移动的对象，每一帧<strong>清空并重新分配</strong>所有对象到网格，往往比逐个更新对象的位置更高效。</li>
+<li><strong>数据结构：</strong> 若采用重新分配策略，可使用<strong>单向链表</strong>，结构更简洁，插入速度快。</li>
+</ul>
+<h4 id="六边形网格-Hexagonal-Grid"><a href="#六边形网格-Hexagonal-Grid" class="headerlink" title="六边形网格 (Hexagonal Grid)"></a>六边形网格 (Hexagonal Grid)</h4><ul>
+<li><strong>适用性：</strong> 当对象直径小于网格直径的1&#x2F;2时。</li>
+<li><strong>优势：</strong><ul>
+<li>邻居数量少：从8个（九宫格）减少到6个。</li>
+<li><strong>射线检测效率高</strong>：六边形结构对射线投射（Raycasting）更友好。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-数据结构实现方案"><a href="#2-数据结构实现方案" class="headerlink" title="2. 数据结构实现方案"></a>2. 数据结构实现方案</h3><ol>
+<li><strong>数组+链表：</strong> 适合动态场景，但链表导致Cache Miss。</li>
+<li><strong>紧凑数组：</strong> 适合静态场景，内存连续，需两次遍历构建。</li>
+<li><strong>哈希表 (Spatial Hashing)：</strong> 适合稀疏大地图，通过 <code>Hash(x,y)</code> 映射无限空间到有限内存。</li>
+<li><strong>位数组 (Bit Array)：</strong> 每一行&#x2F;列分配一个位图，通过位运算 <code>(Row &amp; Col)</code> 快速求交集。</li>
+</ol>
+<h3 id="3-层次网格-Hierarchical-Grid"><a href="#3-层次网格-Hierarchical-Grid" class="headerlink" title="3. 层次网格 (Hierarchical Grid)"></a>3. 层次网格 (Hierarchical Grid)</h3><ul>
+<li><strong>解决问题：</strong> 场景中物体大小差异巨大。</li>
+<li><strong>原理：</strong> 建立多层不同尺寸的网格，大物体放入上层，小物体放入下层。</li>
+<li><strong>局限：</strong> <strong>不适合视锥体剔除</strong>（物体可能跨越边界需被所有网格包含，或被错误提升层级），主要用于碰撞检测。</li>
+</ul>
+<h2 id="三、-四叉树-八叉树-Quadtree-Octree"><a href="#三、-四叉树-八叉树-Quadtree-Octree" class="headerlink" title="三、 四叉树&#x2F;八叉树 (Quadtree &#x2F; Octree)"></a>三、 四叉树&#x2F;八叉树 (Quadtree &#x2F; Octree)</h2><h3 id="1-核心难点：边界对象-Straddling"><a href="#1-核心难点：边界对象-Straddling" class="headerlink" title="1. 核心难点：边界对象 (Straddling)"></a>1. 核心难点：边界对象 (Straddling)</h3><p>当物体位于网格分割线上时，传统做法是将其提升至父节点，导致小物体可能停留在根节点，造成视锥体剔除失效。</p>
+<p><strong>解决方案：松散四&#x2F;八叉树 (Loose Octree)</strong></p>
+<ul>
+<li><strong>原理：</strong> 适当扩大网格的包围盒尺寸（例如扩大到1.2倍）。</li>
+<li><strong>效果：</strong> 边界处的物体能被完全包裹在扩大的子节点中，从而“下沉”到更深的层级，提高剔除精度。</li>
+</ul>
+<h3 id="2-高性能实现：线性八叉树-Linear-Octree"><a href="#2-高性能实现：线性八叉树-Linear-Octree" class="headerlink" title="2. 高性能实现：线性八叉树 (Linear Octree)"></a>2. 高性能实现：线性八叉树 (Linear Octree)</h3><p>传统指针树内存开销大且不连续。现代做法使用 <strong>Morton Code (Z-Order Curve)</strong>。</p>
+<ul>
+<li><strong>Morton Code：</strong> 将多维坐标 $(x, y, z)$ 交叉位运算映射为一维整数 Key。保证了空间局部性。</li>
+<li><strong>存储：</strong> 使用哈希表存储节点 <code>Map&lt;Key, Node&gt;</code>，访问速度从 $O(\log n)$ 提升至 $O(1)$。</li>
+<li><strong>位运算索引推导：</strong><ul>
+<li><strong>父求子：</strong> <code>ChildKey = (ParentKey &lt;&lt; 3) + ChildIndex</code></li>
+<li><strong>子求父：</strong> <code>ParentKey = ChildKey &gt;&gt; 3</code></li>
+<li><em>注：3代表3个维度(x,y,z)，即每次位移3位。</em></li>
+</ul>
+</li>
+</ul>
+<h2 id="四、-k-d树-k-dimensional-Tree"><a href="#四、-k-d树-k-dimensional-Tree" class="headerlink" title="四、 k-d树 (k-dimensional Tree)"></a>四、 k-d树 (k-dimensional Tree)</h2><h3 id="1-定义与构建"><a href="#1-定义与构建" class="headerlink" title="1. 定义与构建"></a>1. 定义与构建</h3><p>k-d树是<strong>二分查找树在k维空间的泛化</strong>，也是BSP树的一种特例（轴对齐分割）。</p>
+<ul>
+<li><strong>构建策略：</strong><ul>
+<li><strong>选轴：</strong> 计算各维度数据的<strong>方差 (Variance)</strong>，选择方差最大（分布最散）的维度进行分割。</li>
+<li><strong>选点：</strong> 选择<strong>中值 (Median)</strong>，保证树的平衡性。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-特性与局限"><a href="#2-特性与局限" class="headerlink" title="2. 特性与局限"></a>2. 特性与局限</h3><ul>
+<li><strong>多维范围查询：</strong> 擅长处理如“年龄&gt;20 且 身高170-180”的多条件查询。</li>
+<li><strong>数据完整性要求：</strong> 必须具备所有维度的数据（不能缺失某个属性），否则无法索引。</li>
+<li><strong>维度诅咒：</strong> 节点数量 $N$ 必须远大于 $2^k$，否则效率不如暴力遍历。</li>
+<li><strong>邻近查询对比：</strong><ul>
+<li><strong>均匀网格：</strong> $O(1)$（直接定位）。</li>
+<li><strong>k-d树：</strong> $O(\log n)$。</li>
+<li><em>结论：游戏中的动态邻近查询更推荐使用均匀网格。</em></li>
+</ul>
+</li>
+</ul>
+<h3 id="3-渲染应用"><a href="#3-渲染应用" class="headerlink" title="3. 渲染应用"></a>3. 渲染应用</h3><ul>
+<li><strong>遮挡剔除&#x2F;透明渲染：</strong> k-d树作为BSP的一种，可以严格确定<strong>从前向后</strong>（Front-to-Back，用于遮挡剔除）或<strong>从后向前</strong>（Back-to-Front，用于透明物体）的遍历顺序。</li>
+</ul>
+<h2 id="五、-BSP树-Binary-Space-Partitioning"><a href="#五、-BSP树-Binary-Space-Partitioning" class="headerlink" title="五、 BSP树 (Binary Space Partitioning)"></a>五、 BSP树 (Binary Space Partitioning)</h2><h3 id="1-特点"><a href="#1-特点" class="headerlink" title="1. 特点"></a>1. 特点</h3><ul>
+<li><strong>任意分割面：</strong> 分割面可以是任意方向和位置（不一定垂直于轴）。</li>
+<li><strong>室内场景神器：</strong> 极其适合多房间、多墙壁的室内场景。</li>
+<li><strong>画家算法：</strong> 早期Z-buffer昂贵时的多边形排序方案。</li>
+</ul>
+<h3 id="2-关键技术"><a href="#2-关键技术" class="headerlink" title="2. 关键技术"></a>2. 关键技术</h3><ul>
+<li><strong>背面剔除 (Back-face Culling)：</strong><ul>
+<li><strong>区别于绕序裁剪：</strong> 图形API的绕序裁剪只考虑眼睛位置；BSP背面剔除需结合<strong>视点位置、视线朝向及视锥体FOV</strong>。</li>
+<li><strong>机制：</strong> 如果视点在分割面的一侧，且视线背离分割面（即平面在视点背后），则另一侧的<strong>所有子节点</strong>都不可见，可直接剔除。</li>
+</ul>
+</li>
+<li><strong>构建方式：</strong><ul>
+<li><strong>手动指定：</strong> 在关卡编辑器中，将房间的墙设定为分割面（低效但可控）。</li>
+<li><strong>自动分割：</strong> 算法复杂，需反复试探寻找最优解，必须<strong>离线预处理</strong>。</li>
+</ul>
+</li>
+<li><strong>凹多面体判断：</strong> 标记复杂凹面体的内外区域。点从根节点开始遍历，直至叶子节点即可判断是否在内部。</li>
+</ul>
+<h2 id="六、-实战案例：大型城市开放世界-类GTA5"><a href="#六、-实战案例：大型城市开放世界-类GTA5" class="headerlink" title="六、 实战案例：大型城市开放世界 (类GTA5)"></a>六、 实战案例：大型城市开放世界 (类GTA5)</h2><p>单一算法无法满足复杂场景（巨型静态城市 + 海量动态交通&#x2F;NPC），需采用混合架构。以下是基于需求的深度分析与实现管线。</p>
+<h3 id="1-需求分析-Requirements"><a href="#1-需求分析-Requirements" class="headerlink" title="1. 需求分析 (Requirements)"></a>1. 需求分析 (Requirements)</h3><ul>
+<li><strong>静态场景：</strong> 极其庞大，高楼林立（如GTA5），包含大量不透明建筑。</li>
+<li><strong>动态对象：</strong> 数量庞大（车流、NPC），位置频繁变化。</li>
+<li><strong>核心痛点：</strong> 必须使用遮挡剔除（Occlusion Culling）以处理高楼遮挡，需要<strong>从前向后</strong>的渲染顺序；需要快速剔除看不见的物体。</li>
+</ul>
+<h3 id="2-离线准备工作-Offline"><a href="#2-离线准备工作-Offline" class="headerlink" title="2. 离线准备工作 (Offline)"></a>2. 离线准备工作 (Offline)</h3><ul>
+<li><strong>AABB分配与合并：</strong> 为静态物体分配AABB；将距离近的小物体合并到一个大的包围盒中，减少节点数量。</li>
+<li><strong>k-d树构建：</strong> 为所有<strong>静态不透明物体</strong>生成一棵k-d树（利用其天然的排序优势）。</li>
+<li><strong>八叉树构建：</strong> 将整个静态场景进行空间划分，用于粗粒度的空间管理。</li>
+</ul>
+<h3 id="3-运行时管线-Runtime-Implementation"><a href="#3-运行时管线-Runtime-Implementation" class="headerlink" title="3. 运行时管线 (Runtime Implementation)"></a>3. 运行时管线 (Runtime Implementation)</h3><h4 id="Step-1-静态物体渲染（双重剔除）"><a href="#Step-1-静态物体渲染（双重剔除）" class="headerlink" title="Step 1: 静态物体渲染（双重剔除）"></a>Step 1: 静态物体渲染（双重剔除）</h4><ol>
+<li><strong>八叉树粗剔除：</strong><ul>
+<li>使用八叉树进行<strong>视锥体剔除 (Frustum Culling)</strong>。</li>
+<li>将所有被剔除的物体进行标记（Marked as Culled）。</li>
+</ul>
+</li>
+<li><strong>k-d树遍历与遮挡剔除：</strong><ul>
+<li>按照<strong>从前向后 (Front-to-Back)</strong> 的顺序遍历k-d树。</li>
+<li><strong>背面子树剔除：</strong> 判断节点是否在视线的背面（且被遮挡平面挡住），如果是，直接<strong>剔除整棵子树</strong>。</li>
+<li><strong>视锥体状态检查：</strong> 遍历节点中的包围盒时，检查该物体是否已被八叉树标记为“剔除”。如果是，直接跳过。</li>
+<li><strong>遮挡查询：</strong> 若物体通过了上述测试，进行遮挡查询（使用Early-Z或软件光栅化）。</li>
+<li><strong>渲染队列：</strong> 通过所有测试的物体加入渲染队列。</li>
+</ul>
+</li>
+</ol>
+<h4 id="Step-2-动态物体管理（以玩家为中心）"><a href="#Step-2-动态物体管理（以玩家为中心）" class="headerlink" title="Step 2: 动态物体管理（以玩家为中心）"></a>Step 2: 动态物体管理（以玩家为中心）</h4><ol>
+<li><strong>均匀网格管理：</strong><ul>
+<li>以主角为中心，使用均匀网格在其周围生成&#x2F;管理动态对象（车、人）。</li>
+<li><strong>生命周期：</strong> 离开一定范围（如9宫格或更大范围）后，销毁或回收对象（使用<strong>对象缓存技术 Object Pooling</strong>，防止频繁GC）。</li>
+</ul>
+</li>
+<li><strong>遮挡优化：</strong><ul>
+<li><strong>角色定位：</strong> 动态物体视为“小物件”，<strong>不作为遮挡体</strong>。</li>
+<li><strong>遮挡关系：</strong> 之前的静态物体（高楼）已作为遮挡体渲染到Z-Buffer中。</li>
+<li><strong>无需排序：</strong> 动态物体无需进行复杂的空间排序，只需进行视锥体剔除，然后进行深度测试（被静态物体遮挡则不渲染）。</li>
+</ul>
+</li>
+</ol>
+<h4 id="Step-3-透明物体"><a href="#Step-3-透明物体" class="headerlink" title="Step 3: 透明物体"></a>Step 3: 透明物体</h4><ol>
+<li>将透明物体加入单独的渲染队列，在不透明物体之后渲染，保证混合正确。</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><table>
+<thead>
+<tr>
+<th>对象类型</th>
+<th>数据结构</th>
+<th>核心策略</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>静态不透明</strong></td>
+<td>八叉树 + k-d树</td>
+<td>八叉树做视锥剔除，k-d树提供从前向后顺序做遮挡剔除。</td>
+</tr>
+<tr>
+<td><strong>动态对象</strong></td>
+<td>均匀网格</td>
+<td>玩家周边生成，静态物体作为遮挡体，无需自身排序。</td>
+</tr>
+<tr>
+<td><strong>透明物体</strong></td>
+<td>渲染队列</td>
+<td>最后渲染。</td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">恒逸</div><div class="post-copyright__author_desc">慢慢来比较快</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3(ai%E4%BF%AE%E6%94%B9%E7%89%88)/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3(ai%E4%BF%AE%E6%94%B9%E7%89%88)/')">游戏开发中的空间划分算法详解</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3(ai%E4%BF%AE%E6%94%B9%E7%89%88)/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=undefined&amp;url=http://example.com/2025/10/04/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3(ai%E4%BF%AE%E6%94%B9%E7%89%88)/&amp;pic=undefined" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">恒逸的博客</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/%E4%B8%AD%E7%BA%A7/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>中级<span class="tagsPageCount">12</span></a></div></div></div><div class="post_share"><div class="social-share" data-image="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/10/04/SLG%E5%A4%A7%E5%9C%B0%E5%9B%BE%E7%9A%84%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">SLG大地图的管理方案</div></div></a></div><div class="next-post pull-right"><a href="/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">游戏场景管理--空间划分</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="anzhiyufont anzhiyu-icon-thumbs-up fa-fw" style="font-size: 1.5rem; margin-right: 4px"></i><span>喜欢这篇文章的人也看了</span></div><div class="relatedPosts-list"><div><a href="/2025/09/20/%E7%BA%A2%E7%82%B9%E7%B3%BB%E7%BB%9F/" title="红点系统"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-09-20</div><div class="title">红点系统</div></div></a></div><div><a href="/2025/09/22/%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="事件系统"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-09-22</div><div class="title">事件系统</div></div></a></div><div><a href="/2025/09/23/%E6%96%B0%E6%89%8B%E5%BC%95%E5%AF%BC/" title="新手引导"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-09-23</div><div class="title">新手引导</div></div></a></div><div><a href="/2025/10/04/SLG%E5%A4%A7%E5%9C%B0%E5%9B%BE%E7%9A%84%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88/" title="SLG大地图的管理方案"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-10-04</div><div class="title">SLG大地图的管理方案</div></div></a></div><div><a href="/2025/10/04/%E5%B8%A7%E5%90%8C%E6%AD%A5/" title="帧同步"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-10-04</div><div class="title">帧同步</div></div></a></div><div><a href="/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/" title="游戏场景管理--空间划分"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-10-04</div><div class="title">游戏场景管理--空间划分</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://bu.dusays.com/2023/04/27/64496e511b09c.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description"></div></div></div><div class="card-widget anzhiyu-right-widget" id="card-wechat" onclick="null"><div id="flip-wrapper"><div id="flip-content"><div class="face" style="background: url(https://bu.dusays.com/2023/01/13/63c02edf44033.png) center center / 100% no-repeat"></div><div class="back face" style="background: url(https://bu.dusays.com/2023/05/13/645fa415e8694.png) center center / 100% no-repeat"></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81-%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">一、 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81-%E5%9D%87%E5%8C%80%E7%BD%91%E6%A0%BC-Uniform-Grid"><span class="toc-number">2.</span> <span class="toc-text">二、 均匀网格 (Uniform Grid)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E4%B8%8E%E7%A2%B0%E6%92%9E%E4%BC%98%E5%8C%96"><span class="toc-number">2.1.</span> <span class="toc-text">1. 核心原理与碰撞优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95%E5%AF%B9%E6%AF%94"><span class="toc-number">2.1.1.</span> <span class="toc-text">碰撞检测算法对比</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%AF%B9%E8%B1%A1%E4%BC%98%E5%8C%96%E7%AD%96%E7%95%A5"><span class="toc-number">2.1.2.</span> <span class="toc-text">动态对象优化策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%AD%E8%BE%B9%E5%BD%A2%E7%BD%91%E6%A0%BC-Hexagonal-Grid"><span class="toc-number">2.1.3.</span> <span class="toc-text">六边形网格 (Hexagonal Grid)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88"><span class="toc-number">2.2.</span> <span class="toc-text">2. 数据结构实现方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%B1%82%E6%AC%A1%E7%BD%91%E6%A0%BC-Hierarchical-Grid"><span class="toc-number">2.3.</span> <span class="toc-text">3. 层次网格 (Hierarchical Grid)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81-%E5%9B%9B%E5%8F%89%E6%A0%91-%E5%85%AB%E5%8F%89%E6%A0%91-Quadtree-Octree"><span class="toc-number">3.</span> <span class="toc-text">三、 四叉树&#x2F;八叉树 (Quadtree &#x2F; Octree)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E9%9A%BE%E7%82%B9%EF%BC%9A%E8%BE%B9%E7%95%8C%E5%AF%B9%E8%B1%A1-Straddling"><span class="toc-number">3.1.</span> <span class="toc-text">1. 核心难点：边界对象 (Straddling)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%AB%98%E6%80%A7%E8%83%BD%E5%AE%9E%E7%8E%B0%EF%BC%9A%E7%BA%BF%E6%80%A7%E5%85%AB%E5%8F%89%E6%A0%91-Linear-Octree"><span class="toc-number">3.2.</span> <span class="toc-text">2. 高性能实现：线性八叉树 (Linear Octree)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81-k-d%E6%A0%91-k-dimensional-Tree"><span class="toc-number">4.</span> <span class="toc-text">四、 k-d树 (k-dimensional Tree)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%9A%E4%B9%89%E4%B8%8E%E6%9E%84%E5%BB%BA"><span class="toc-number">4.1.</span> <span class="toc-text">1. 定义与构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%89%B9%E6%80%A7%E4%B8%8E%E5%B1%80%E9%99%90"><span class="toc-number">4.2.</span> <span class="toc-text">2. 特性与局限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%B8%B2%E6%9F%93%E5%BA%94%E7%94%A8"><span class="toc-number">4.3.</span> <span class="toc-text">3. 渲染应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81-BSP%E6%A0%91-Binary-Space-Partitioning"><span class="toc-number">5.</span> <span class="toc-text">五、 BSP树 (Binary Space Partitioning)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%89%B9%E7%82%B9"><span class="toc-number">5.1.</span> <span class="toc-text">1. 特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF"><span class="toc-number">5.2.</span> <span class="toc-text">2. 关键技术</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81-%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B%EF%BC%9A%E5%A4%A7%E5%9E%8B%E5%9F%8E%E5%B8%82%E5%BC%80%E6%94%BE%E4%B8%96%E7%95%8C-%E7%B1%BBGTA5"><span class="toc-number">6.</span> <span class="toc-text">六、 实战案例：大型城市开放世界 (类GTA5)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90-Requirements"><span class="toc-number">6.1.</span> <span class="toc-text">1. 需求分析 (Requirements)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%A6%BB%E7%BA%BF%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C-Offline"><span class="toc-number">6.2.</span> <span class="toc-text">2. 离线准备工作 (Offline)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%BF%90%E8%A1%8C%E6%97%B6%E7%AE%A1%E7%BA%BF-Runtime-Implementation"><span class="toc-number">6.3.</span> <span class="toc-text">3. 运行时管线 (Runtime Implementation)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-1-%E9%9D%99%E6%80%81%E7%89%A9%E4%BD%93%E6%B8%B2%E6%9F%93%EF%BC%88%E5%8F%8C%E9%87%8D%E5%89%94%E9%99%A4%EF%BC%89"><span class="toc-number">6.3.1.</span> <span class="toc-text">Step 1: 静态物体渲染（双重剔除）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-2-%E5%8A%A8%E6%80%81%E7%89%A9%E4%BD%93%E7%AE%A1%E7%90%86%EF%BC%88%E4%BB%A5%E7%8E%A9%E5%AE%B6%E4%B8%BA%E4%B8%AD%E5%BF%83%EF%BC%89"><span class="toc-number">6.3.2.</span> <span class="toc-text">Step 2: 动态物体管理（以玩家为中心）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-3-%E9%80%8F%E6%98%8E%E7%89%A9%E4%BD%93"><span class="toc-number">6.3.3.</span> <span class="toc-text">Step 3: 透明物体</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.4.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/18/Unity%20UI%20%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%A0%E5%BA%94%E8%AF%A5%E5%B0%91%E7%94%A8%20SetActive%EF%BC%9F/" title="Unity UI 性能优化：为什么你应该少用 SetActive？">Unity UI 性能优化：为什么你应该少用 SetActive？</a><time datetime="2026-01-17T16:09:34.000Z" title="发表于 2026-01-18 00:09:34">2026-01-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/04/%E7%BA%A2%E7%82%B9%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F%E4%BB%A5%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" title="红点系统的前世今生以及相关注意事项">红点系统的前世今生以及相关注意事项</a><time datetime="2025-10-03T20:59:12.000Z" title="发表于 2025-10-04 04:59:12">2025-10-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/04/%E5%B8%A7%E5%90%8C%E6%AD%A5/" title="帧同步">帧同步</a><time datetime="2025-10-03T20:56:58.000Z" title="发表于 2025-10-04 04:56:58">2025-10-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/04/%E5%A4%A7%E7%99%BD%E8%AF%9D%E8%AE%B2%E6%87%82%E2%80%9C%E5%B8%A7%E5%90%8C%E6%AD%A5%E2%80%9D%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%A0%E7%9A%84%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80%E4%BC%9A%E5%8D%A1(AI%E4%BF%AE%E6%AD%A3%E7%89%88)/" title="大白话讲懂“帧同步”：为什么你的王者荣耀会卡？">大白话讲懂“帧同步”：为什么你的王者荣耀会卡？</a><time datetime="2025-10-03T20:56:58.000Z" title="发表于 2025-10-04 04:56:58">2025-10-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/04/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86-%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86/" title="游戏场景管理--空间划分">游戏场景管理--空间划分</a><time datetime="2025-10-03T19:49:48.000Z" title="发表于 2025-10-04 03:49:48">2025-10-04</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2025 - 2026 By <a class="footer-bar-link" href="/" title="恒逸" target="_blank">恒逸</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">0</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://image.anheyu.com/" title="安知鱼图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="安知鱼图床"/><span class="back-menu-item-text">安知鱼图床</span></a></div></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/SLG/" style="font-size: 0.88rem;">SLG<sup>1</sup></a><a href="/tags/%E4%B8%AD%E7%BA%A7/" style="font-size: 0.88rem;">中级<sup>12</sup></a><a href="/tags/%E5%A4%A7%E5%9C%B0%E5%9B%BE/" style="font-size: 0.88rem;">大地图<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="14311864028" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random" volume="0.7"></meting-js></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://music.163.com/#/playlist?id=14311864028&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("09/20/2025 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2025 By 安知鱼 V1.6.14",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 恒逸 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
